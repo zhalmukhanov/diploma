@@ -1,0 +1,7 @@
+{
+  "name": "diplomaApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
