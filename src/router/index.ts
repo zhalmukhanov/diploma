@@ -1,20 +1,24 @@
-import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
+/* eslint-disable */
+import { createRouter, createWebHistory } from '@ionic/vue-router'
+import { RouteRecordRaw } from 'vue-router'
+import {useParser} from './parser'
 
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '',
-    redirect: '/folder/Inbox'
-  },
-  {
-    path: '/folder/:id',
-    component: () => import ('../views/FolderPage.vue')
-  }
+const parser = await useParser()
+const allRoutes = parser.getRoutes()
+
+const routes: RouteRecordRaw[] = [
+    {
+      path: '',
+      redirect: '/main'
+    },
+    ...allRoutes
 ]
 
-const router = createRouter({
+const index = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 
-export default router
+
+
+export default index

@@ -17,5 +17,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom'
+  },
+  esbuild: {
+    // Configure the ES module type
+    target: 'esnext'
   }
 })

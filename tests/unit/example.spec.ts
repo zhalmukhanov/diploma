@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import FolderPage from '@/views/FolderPage.vue'
+import FolderPage from '../../src/domains/TestPage/FolderPage.vue'
 import { describe, expect, test } from 'vitest'
 
 describe('FolderPage.vue', () => {

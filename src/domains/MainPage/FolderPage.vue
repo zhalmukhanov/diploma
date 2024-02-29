@@ -1,24 +1,25 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-menu-button color="primary"></ion-menu-button>
-        </ion-buttons>
-        <ion-title>{{ $route.params.id }}</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ion-buttons slot="start">
+
+    </ion-buttons>
 
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">{{ $route.params.id }}</ion-title>
-        </ion-toolbar>
+        <div>
+          <ion-menu-button color="primary"></ion-menu-button>
+          <ion-toolbar>
+            <ion-title size="large">Main</ion-title>
+          </ion-toolbar>
+        </div>
       </ion-header>
 
       <div id="container">
-        <strong class="capitalize">{{ $route.params.id }}</strong>
-        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <div class="flex flex-col">
+          <strong class="capitalize">Main page</strong>
+          <strong class="capitalize">Main page</strong>
+          <strong class="capitalize">Main page</strong>
+        </div>
       </div>
     </ion-content>
   </ion-page>
