@@ -9,7 +9,7 @@ const allRoutes = parser.getRoutes()
 const routes: RouteRecordRaw[] = [
     {
       path: '',
-      redirect: '/main'
+      redirect: '/hello'
     },
     ...allRoutes
 ]
