@@ -1,10 +1,31 @@
 <script setup lang="ts">
 import { IonRippleEffect } from '@ionic/vue'
+import {computed} from "vue";
+
+const props = defineProps<{
+  color: {
+    type: 'primary' | 'secondary',
+    required: false,
+    default: 'primary'
+  }
+}>()
+
+const classes = {
+  base: 'px-4 py-2 rounded-lg inline-flex items-center justify-center  font-bold',
+  color: {
+    primary: 'bg-blue-700 hover:bg-blue-600 text-white',
+    secondary: 'bg-white text-blue-700 hover:bg-gray-200'
+  }
+}
+
+const buttonClasses = computed(() => {
+  return `${classes.base} ${classes.color[props.color]}`
+})
 
 </script>
 
 <template>
-  <div class="px-4 py-2 bg-blue-700 rounded-lg inline-flex items-center justify-center text-white font-bold hover:bg-blue-600">
+  <div :class="buttonClasses">
     <slot>Button</slot>
 
     <ion-ripple-effect>

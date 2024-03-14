@@ -1,38 +1,25 @@
 <template>
   <ion-app>
-    <ion-split-pane content-id="main-content">
-      <ion-menu content-id="main-content" type="overlay">
-        <ion-content>
-          <ion-list id="inbox-list">
-            <ion-list-header>Adilbek Zhalmukhanov</ion-list-header>
-            <ion-note>-7 (705) 825 33 45</ion-note>
-
-            <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-          </ion-list>
-        </ion-content>
-      </ion-menu>
-      <ion-router-outlet id="main-content"></ion-router-outlet>
-    </ion-split-pane>
+    <ion-menu type="overlay" content-id="main-content">
+      <div>
+        <div v-for="pages in appPages" :key="pages.url" >
+          <router-link :to="pages.url">
+            <span>{{pages.title}}</span>
+          </router-link>
+        </div>
+      </div>
+    </ion-menu>
+    <div class="h-full w-full">
+      <router-view/>
+    </div>
   </ion-app>
 </template>
 
 <script setup lang="ts">
 import {
   IonApp,
-  IonContent,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
   IonMenu,
-  IonMenuToggle,
-  IonNote,
-  IonRouterOutlet,
-  IonSplitPane,
+  IonContent,
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {

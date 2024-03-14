@@ -11,7 +11,7 @@ export const useParser = async (): Promise<IParser> => {
     const files = [ ...load ]
 
     files.forEach((file) => {
-        routes.push(convertToRoute(file))
+        routes.push(...convertToRoute(file))
     })
 
     return {

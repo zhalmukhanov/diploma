@@ -1,6 +1,5 @@
 /* eslint-disable */
-import { createRouter, createWebHistory } from '@ionic/vue-router'
-import { RouteRecordRaw } from 'vue-router'
+import { RouteRecordRaw, createRouter, createWebHistory  } from 'vue-router'
 import {useParser} from './parser'
 
 const parser = await useParser()
@@ -13,6 +12,7 @@ const routes: RouteRecordRaw[] = [
     },
     ...allRoutes
 ]
+
 
 const index = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

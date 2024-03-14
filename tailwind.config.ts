@@ -12,7 +12,8 @@ export default {
       transparent: 'transparent',
       current: 'currentColor',
       white: '#FAFAFA',
-      blue: colors.blue
+      blue: colors.blue,
+      gray: colors.gray,
     },
     extend: {},
   },
