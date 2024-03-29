@@ -18,8 +18,7 @@
 <script setup lang="ts">
 import {
   IonApp,
-  IonMenu,
-  IonContent,
+  IonMenu
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {

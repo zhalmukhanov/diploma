@@ -2,7 +2,6 @@
 import IconBack from '@/shared/ui/icon/back.vue'
 import OpsInput from '@/shared/ui/components/Input.vue'
 import OpsButton from '@/shared/ui/components/Button.vue'
-import {IonImg} from "@ionic/vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 

@@ -12,8 +12,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@2gis/mapgl": "^1.46.0",
     "@capacitor/app": "5.0.7",
     "@capacitor/core": "5.7.0",
+    "@capacitor/geolocation": "^5.0.7",
     "@capacitor/haptics": "5.0.7",
     "@capacitor/keyboard": "5.0.8",
     "@capacitor/status-bar": "5.0.7",
@@ -21,6 +23,7 @@
     "@ionic/vue-router": "^7.0.0",
     "@rushstack/eslint-patch": "^1.9.0",
     "@vue/eslint-config-standard-with-typescript": "^8.0.0",
+    "2gis-maps": "^3.7.3",
     "ionicons": "^7.0.0",
     "vue": "^3.3.0",
     "vue-i18n": "^8.28.2",

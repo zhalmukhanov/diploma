@@ -2,7 +2,6 @@
 import IconBack from '@/shared/ui/icon/back.vue'
 import OpsInput from '@/shared/ui/components/Input.vue'
 import OpsButton from '@/shared/ui/components/Button.vue'
-import {IonImg} from "@ionic/vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 
@@ -44,7 +43,7 @@ const goReset = () => {
         <span class="text-sm text-[#1E40AF]" @click="goReset">Forgot password?</span>
 
         <div class="flex flex-col grow justify-end h-full w-full">
-          <ops-button class="h-[46px]">Log In</ops-button>
+          <ops-button class="h-[46px]" @click="router.push('/main')">Log In</ops-button>
         </div>
       </div>
 
