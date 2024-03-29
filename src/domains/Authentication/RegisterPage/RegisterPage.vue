@@ -8,6 +8,9 @@ import {useRouter} from "vue-router";
 
 const router = useRouter()
 
+const name = ref('')
+const surname = ref('')
+const confirmPassword = ref('')
 const email = ref('')
 const password = ref('')
 
@@ -27,24 +30,26 @@ const goReset = () => {
       <div class="bg mx-[45px] grow"/>
       <div class="mt-2">
         <p class="text-xl text-white font-bold">
-          Log In to ParKing
+          Register to Parking
         </p>
         <p class="text-base text-white">
-          Does’t have an account?
-          <span class="underline hover:text-gray-200" @click="router.push('/register')">Register</span>
+          Already have an account?
+          <span class="underline hover:text-gray-200" @click="router.push('/login')">Log In</span>
         </p>
       </div>
     </div>
     <div class="bg-white w-full min-h-[376px] ion-padding rounded-t-2xl py-6 px-4">
       <div class="flex flex-col items-center w-full h-full gap-6">
         <div class="flex flex-col gap-2 w-full">
+          <ops-input v-model="name" placeholder="Name" class="h-[46px]"/>
+          <ops-input v-model="surname" placeholder="Surname" class="h-[46px]"/>
           <ops-input v-model="email" placeholder="Email" class="h-[46px]"/>
-          <ops-input type="password" v-model="password" placeholder="Password" class="h-[46px]"/>
+          <ops-input v-model="password" type="password" placeholder="New password"  class="h-[46px]"/>
+          <ops-input type="password" v-model="confirmPassword" placeholder="Confirm new password" class="h-[46px]"/>
         </div>
-        <span class="text-sm text-[#1E40AF]" @click="goReset">Forgot password?</span>
 
-        <div class="flex flex-col grow justify-end h-full w-full">
-          <ops-button class="h-[46px]">Log In</ops-button>
+        <div class="flex flex-col grow justify-end h-full w-full mt-4">
+          <ops-button class="h-[46px]" @click="router.push('/login')">Log In</ops-button>
         </div>
       </div>
 

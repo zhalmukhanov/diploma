@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import OpsButton from '@/shared/ui/components/Button.vue'
-import { IonImg, IonMenuButton} from '@ionic/vue'
+import { IonImg} from '@ionic/vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
 </script>
 
 <template>
@@ -18,7 +17,7 @@ const router = useRouter()
       </div>
       <div class="flex flex-col gap-2 grow justify-end mb-[44px]">
         <ops-button color="secondary" class="h-11" @click="router.push('/login')">Log In</ops-button>
-        <ops-button color="secondary"  class="h-11">Register</ops-button>
+        <ops-button color="secondary"  class="h-11" @click="router.push('/register')">Register</ops-button>
       </div>
     </div>
 </template>

@@ -31,7 +31,8 @@ const app = createApp(App)
   .use(IonicVue)
   .use(index)
   .use(VueI18n);
-  
+
+
 index.isReady().then(() => {
   app.mount('#app');
 });

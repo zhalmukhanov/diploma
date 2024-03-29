@@ -19,10 +19,14 @@
     "@capacitor/status-bar": "5.0.7",
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
+    "@rushstack/eslint-patch": "^1.9.0",
+    "@vue/eslint-config-standard-with-typescript": "^8.0.0",
     "ionicons": "^7.0.0",
     "vue": "^3.3.0",
     "vue-i18n": "^8.28.2",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.2.0",
+    "vue3-otp-input": "^0.4.4",
+    "vue3-otp-input-field": "^1.0.4"
   },
   "devDependencies": {
     "@capacitor/cli": "5.7.0",
@@ -32,8 +36,8 @@
     "@vue/test-utils": "^2.3.0",
     "autoprefixer": "^10.4.17",
     "cypress": "^13.5.0",
-    "eslint": "^8.35.0",
-    "eslint-plugin-vue": "^9.9.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.24.0",
     "jsdom": "^22.1.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
