@@ -1,6 +1,6 @@
 <template>
     <div id="container" class="h-full w-full relative">
-      <div class="absolute top-10 z-50 flex gap-4 px-4 w-full">
+      <div class="absolute top-5 z-50 flex gap-4 px-4 w-full">
         <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
           <IconMenu />
         </div>
@@ -46,7 +46,7 @@ const longitude = ref(0);
 const startZoom = ref(17);
 
 
-const printCurrentPosition = async () => {
+const getCurrentPosition = async () => {
   const coordinates = await Geolocation.getCurrentPosition();
   latitude.value = coordinates.coords.latitude;
   longitude.value = coordinates.coords.longitude;
@@ -57,19 +57,19 @@ const zoom = (change) => {
 }
 
 const goToMyLocation = async () => {
-  await printCurrentPosition();
+  await getCurrentPosition();
   map.value.setCenter([longitude.value, latitude.value]);
   map.value.setZoom(startZoom.value);
 }
 
 onMounted(async () => {
-  await printCurrentPosition();
+  await getCurrentPosition();
 
   load().then((mapgl) => {
     map.value = new mapgl.Map('container', {
       center: [longitude.value, latitude.value],
       zoom: startZoom.value,
-      // key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
+      key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
       zoomControl: false,
     })
 
