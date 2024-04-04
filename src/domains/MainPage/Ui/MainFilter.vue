@@ -2,7 +2,7 @@
   <div class="w-full flex flex-col gap-4 pt-[24px] pb-[55px] px-6">
     <div class="flex justify-between w-full">
       <span class="font-bold text-[18px]">Filter</span>
-      <span class="text-[#1E40AF] text-sm underline">Reset</span>
+      <span class="text-[#1E40AF] text-sm underline" @click="reset">Reset</span>
     </div>
     <div class="flex flex-col gap-6 w-full">
       <div class="flex flex-col gap-3 w-full">
@@ -84,6 +84,14 @@ const pinFormatter = (value: number) => {
   return `${value}km`
 }
 
+const reset = () => {
+  parkingType.value = null
+  forBeginners.value = false
+  forElectricCar.value = false
+  forDisabledPeople.value = false
+  radius.value = { min: 0, max: 10 }
+}
+
 </script>
 
 <style scoped>
@@ -116,8 +124,6 @@ ion-range::part(knob) {
 ion-range::part(knob) {
   background: #FAFAFA;
 }
-
-
 
 ion-range::part(bar) {
   background: #78788033;

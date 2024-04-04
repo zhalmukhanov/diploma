@@ -5,8 +5,11 @@
           <IconMenu />
         </div>
 
-        <div class="grow">
-          <ops-input v-model="search" placeholder="Search" class="h-[40px] w-full" :border="false" place-gray/>
+        <div class="grow" id="search-modal">
+          <div class="h-[40px] w-full flex items-center justify-between px-3 text-gray-400 bg-white rounded-md gap-2">
+            Search
+            <icon-search />
+          </div>
         </div>
 
         <div id="filter-modal" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
@@ -30,6 +33,12 @@
         <main-filter />
       </div>
     </ion-modal>
+
+    <ion-modal trigger="search-modal" :initial-breakpoint="1" :breakpoints="[0, 1]">
+      <div class="block">
+        <main-search />
+      </div>
+    </ion-modal>
 </template>
 
 <script setup lang="ts">
@@ -39,13 +48,14 @@ import { Geolocation } from '@capacitor/geolocation';
 import { IonModal } from '@ionic/vue';
 
 import MainFilter from './Ui/MainFilter.vue';
+import MainSearch from './Ui/MainSearch.vue';
 
 import IconPluse from '@/shared/ui/icon/pluse.vue'
 import IconMinus from '@/shared/ui/icon/minus.vue'
 import IconMap from '@/shared/ui/icon/map.vue'
 import IconMenu from '@/shared/ui/icon/menu.vue'
 import IconFilter from '@/shared/ui/icon/filter.vue'
-import OpsInput from "@/shared/ui/components/Input.vue";
+import IconSearch from '@/shared/ui/icon/search.vue'
 
 const map = ref(null);
 const myMarker = ref(null);

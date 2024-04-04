@@ -18,25 +18,40 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  serach: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
 })
 
 
 const classes = {
   base: 'px-4 py-2 rounded-lg inline-flex items-center justify-center border-[1px] focus:border-blue-700 focus:outline-none text-sm text-black',
+  search: 'search pr-9',
   border: 'border-gray-300',
 }
 
 const buttonClasses = computed(() => {
-  return `${classes.base} ${props.border ? classes.border : ''} ${props.placeGray ? 'placeholder-gray' : 'placeholder'}`
+  return `
+    ${classes.base} ${props.border ? classes.border : ''}
+    ${props.placeGray ? 'placeholder-gray' : 'placeholder'}
+    ${props.serach ? classes.search : ''}`
 })
 
 </script>
 
 <template>
-  <input :type="type" :class="buttonClasses" v-model="modelValue" />
+  <input :type="type" :class="buttonClasses" v-model="modelValue"/>
 </template>
 
 <style scoped>
+.search {
+  background-image: url('/img/search.svg');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
 .placeholder::placeholder {
   color: #030712;
   opacity: 1; /* Firefox */
