@@ -1,30 +1,36 @@
 <template>
     <div id="container" class="h-full w-full relative">
       <div class="absolute top-5 z-50 flex gap-4 px-4 w-full">
-        <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
+        <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
           <IconMenu />
+          <ion-ripple-effect/>
         </div>
 
         <div class="grow" id="search-modal">
-          <div class="h-[40px] w-full flex items-center justify-between px-3 text-gray-400 bg-white rounded-md gap-2">
-            Search
+          <div class="h-[40px] w-full flex items-center justify-between px-3 text-gray-400 bg-white rounded-md gap-2 ion-activatable ripple-wrapper">
+            Search {{ isOpenParking }}
             <icon-search />
+            <ion-ripple-effect/>
           </div>
         </div>
 
-        <div id="filter-modal" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
+        <div id="filter-modal" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
           <IconFilter />
+          <ion-ripple-effect/>
         </div>
       </div>
       <div class="absolute bottom-32 right-4  z-50 flex flex-col gap-4">
-        <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
+        <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
           <IconMap />
+          <ion-ripple-effect/>
         </div>
-        <div @click="zoom(+1)" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
+        <div @click="zoom(+1)" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
           <IconPluse />
+          <ion-ripple-effect/>
         </div>
-        <div @click="zoom(-1)" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
+        <div @click="zoom(-1)" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
           <IconMinus />
+          <ion-ripple-effect/>
         </div>
       </div>
     </div>
@@ -39,13 +45,20 @@
         <main-search />
       </div>
     </ion-modal>
+
+  <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
+    <div class="block">
+      <main-parking :coordinates="openParkingCoords"/>
+    </div>
+  </ion-modal>
 </template>
 
 <script setup lang="ts">
 import { load } from '@2gis/mapgl';
+import { Clusterer } from '@2gis/mapgl-clusterer';
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { Geolocation } from '@capacitor/geolocation';
-import { IonModal } from '@ionic/vue';
+import { IonModal, IonRippleEffect } from '@ionic/vue';
 
 import MainFilter from './Ui/MainFilter.vue';
 import MainSearch from './Ui/MainSearch.vue';
@@ -56,18 +69,34 @@ import IconMap from '@/shared/ui/icon/map.vue'
 import IconMenu from '@/shared/ui/icon/menu.vue'
 import IconFilter from '@/shared/ui/icon/filter.vue'
 import IconSearch from '@/shared/ui/icon/search.vue'
+import {Icon} from "ionicons/dist/types/components/icon/icon";
+import MainParking from "@/domains/MainPage/Ui/MainParking.vue";
+
+
+type Coordinates = {
+  longitude: number
+  latitude: number
+}
 
 const map = ref(null);
 const myMarker = ref(null);
-const search = ref('');
-const isOpenFilter = ref(false);
+const isOpenParking = ref(false);
+const openParkingCoords = ref<Coordinates | null>(null);
 const latitude = ref(0);
 const longitude = ref(0);
 const startZoom = ref(17);
 
+const closeParking = async () => {
+  isOpenParking.value = false;
+}
 
-const openFilter = () => {
-  isOpenFilter.value = true;
+const openParking = async (cords: number[]) => {
+  await closeParking();
+  openParkingCoords.value = {
+    longitude: cords[0],
+    latitude: cords[1]
+  }
+  isOpenParking.value = true;
 }
 
 const getCurrentPosition = async () => {
@@ -105,7 +134,25 @@ onMounted(async () => {
         text: "This is me",
       }
     });
+
+    [
+      [longitude.value + 0.001, latitude.value + 0.001],
+      [longitude.value - 0.001, latitude.value - 0.001]
+    ].forEach((coord) => {
+      const marker = new mapgl.Marker(map.value, {
+        coordinates: coord,
+        icon: 'https://cdn-icons-png.flaticon.com/512/4920/4920131.png',
+        size: [43, 43],
+      });
+
+      marker.on('click', (e) => {
+        openParking(e.lngLat);
+      });
+    });
   })
+
+  const clusterer = new Clusterer(map);
+  clusterer.load(markers);
 })
 
 onBeforeUnmount(() => {

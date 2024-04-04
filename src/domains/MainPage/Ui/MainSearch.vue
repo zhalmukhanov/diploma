@@ -11,11 +11,12 @@
       <div class="inline-flex flex-col gap-2 items-start">
         <div
             v-for="result in searchResult"
-            class="rounded-[10px] border-[1px] border-[#D8D8D8] h-[40px] px-4 flex items-center justify-center text-sm"
+            class="rounded-[10px] border-[1px] border-[#D8D8D8] h-[40px] px-4 flex items-center justify-center text-sm ion-activatable ripple-wrapper"
             :key="result.id"
             @click="selectResult(result.id)"
         >
           {{ result.name }}
+          <ion-ripple-effect></ion-ripple-effect>
         </div>
       </div>
 
@@ -25,6 +26,7 @@
 
 <script setup lang="ts">
 import {ref, watch} from "vue";
+import { IonRippleEffect } from '@ionic/vue';
 import OpsInput from "@/shared/ui/components/Input.vue";
 
 type Result =
