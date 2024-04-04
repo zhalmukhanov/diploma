@@ -6,10 +6,10 @@
         </div>
 
         <div class="grow">
-          <ops-input v-model="email" placeholder="Search" class="h-[40px] w-full" :border="false" place-gray/>
+          <ops-input v-model="search" placeholder="Search" class="h-[40px] w-full" :border="false" place-gray/>
         </div>
 
-        <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
+        <div id="filter-modal" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center">
           <IconFilter />
         </div>
       </div>
@@ -25,12 +25,20 @@
         </div>
       </div>
     </div>
+    <ion-modal trigger="filter-modal" :initial-breakpoint="1" :breakpoints="[0, 1]">
+      <div class="block">
+        <main-filter />
+      </div>
+    </ion-modal>
 </template>
 
 <script setup lang="ts">
 import { load } from '@2gis/mapgl';
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { Geolocation } from '@capacitor/geolocation';
+import { IonModal } from '@ionic/vue';
+
+import MainFilter from './Ui/MainFilter.vue';
 
 import IconPluse from '@/shared/ui/icon/pluse.vue'
 import IconMinus from '@/shared/ui/icon/minus.vue'
@@ -41,10 +49,16 @@ import OpsInput from "@/shared/ui/components/Input.vue";
 
 const map = ref(null);
 const myMarker = ref(null);
+const search = ref('');
+const isOpenFilter = ref(false);
 const latitude = ref(0);
 const longitude = ref(0);
 const startZoom = ref(17);
 
+
+const openFilter = () => {
+  isOpenFilter.value = true;
+}
 
 const getCurrentPosition = async () => {
   const coordinates = await Geolocation.getCurrentPosition();
@@ -69,7 +83,7 @@ onMounted(async () => {
     map.value = new mapgl.Map('container', {
       center: [longitude.value, latitude.value],
       zoom: startZoom.value,
-      key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
+      // key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
       zoomControl: false,
     })
 
@@ -92,5 +106,23 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+ion-modal {
+  --height: auto;
+
+}
+
+ion-modal.ios {
+  --border-radius: 20px;
+}
+
+ion-modal.md {
+  --border-radius: 20px 20px 0 0;
+}
 </style>
