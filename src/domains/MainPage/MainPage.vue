@@ -48,20 +48,19 @@
 
   <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
     <div class="block">
-      <main-parking :coordinates="openParkingCoords"/>
+      <main-parking :id="openParkingId"/>
     </div>
   </ion-modal>
 </template>
 
 <script setup lang="ts">
 import { load } from '@2gis/mapgl';
-import { Clusterer } from '@2gis/mapgl-clusterer';
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { Geolocation } from '@capacitor/geolocation';
 import { IonModal, IonRippleEffect } from '@ionic/vue';
 
-import MainFilter from './Ui/MainFilter.vue';
-import MainSearch from './Ui/MainSearch.vue';
+import MainFilter from '@/domains/MainPage/ui/MainFilter.vue';
+import MainSearch from '@/domains/MainPage/ui/MainSearch.vue';
 
 import IconPluse from '@/shared/ui/icon/pluse.vue'
 import IconMinus from '@/shared/ui/icon/minus.vue'
@@ -69,19 +68,14 @@ import IconMap from '@/shared/ui/icon/map.vue'
 import IconMenu from '@/shared/ui/icon/menu.vue'
 import IconFilter from '@/shared/ui/icon/filter.vue'
 import IconSearch from '@/shared/ui/icon/search.vue'
-import {Icon} from "ionicons/dist/types/components/icon/icon";
-import MainParking from "@/domains/MainPage/Ui/MainParking.vue";
 
-
-type Coordinates = {
-  longitude: number
-  latitude: number
-}
+import MainParking from "@/domains/MainPage/ui/MainParking.vue";
+import {parkings} from "@/domains/MainPage/values/parkings";
 
 const map = ref(null);
 const myMarker = ref(null);
 const isOpenParking = ref(false);
-const openParkingCoords = ref<Coordinates | null>(null);
+const openParkingId = ref<number | null>(null);
 const latitude = ref(0);
 const longitude = ref(0);
 const startZoom = ref(17);
@@ -90,12 +84,9 @@ const closeParking = async () => {
   isOpenParking.value = false;
 }
 
-const openParking = async (cords: number[]) => {
+const openParking = async (id: number) => {
   await closeParking();
-  openParkingCoords.value = {
-    longitude: cords[0],
-    latitude: cords[1]
-  }
+  openParkingId.value =  id
   isOpenParking.value = true;
 }
 
@@ -135,24 +126,23 @@ onMounted(async () => {
       }
     });
 
-    [
-      [longitude.value + 0.001, latitude.value + 0.001],
-      [longitude.value - 0.001, latitude.value - 0.001]
-    ].forEach((coord) => {
+    parkings.forEach((parking) => {
       const marker = new mapgl.Marker(map.value, {
-        coordinates: coord,
-        icon: 'https://cdn-icons-png.flaticon.com/512/4920/4920131.png',
-        size: [43, 43],
+        coordinates: [parking.coordinates.longitude, parking.coordinates.latitude],
+        icon: 'https://raw.githubusercontent.com/zhalmukhanov/diploma/dev/public/img/parking-marker.svg',
+        size: [31, 43],
+        userData: {
+          id: parking.id,
+        }
       });
 
+
       marker.on('click', (e) => {
-        openParking(e.lngLat);
+        console.log(e.targetData.userData.id)
+        openParking(e.targetData.userData.id);
       });
     });
   })
-
-  const clusterer = new Clusterer(map);
-  clusterer.load(markers);
 })
 
 onBeforeUnmount(() => {

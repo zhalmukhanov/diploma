@@ -9,18 +9,20 @@
         <span class="text-[#696969] text-sm">Parking type</span>
         <div class="flex gap-2">
           <div
-              class="w-1/2  rounded-md h-9 flex justify-center items-center text-[18px] font-medium border-[#D8D8D8] border-[1px]"
+              class="w-1/2  rounded-md h-9 flex justify-center items-center text-[18px] font-medium border-[#D8D8D8] border-[1px] ion-activatable ripple-wrapper"
               :class="{ 'bg-blue-700 text-white border-none': parkingType === 'indoor' }"
               @click="setParkingType('indoor')"
           >
             Indoor
+            <ion-ripple-effect/>
           </div>
           <div
-              class="w-1/2  rounded-md h-9 flex justify-center items-center text-[18px] font-medium border-[#D8D8D8] border-[1px]"
+              class="w-1/2  rounded-md h-9 flex justify-center items-center text-[18px] font-medium border-[#D8D8D8] border-[1px] ion-activatable ripple-wrapper"
               :class="{ 'bg-blue-700 text-white': parkingType === 'outdoor' }"
               @click="setParkingType('outdoor')"
           >
             Outdoor
+            <ion-ripple-effect/>
           </div>
         </div>
       </div>
@@ -62,6 +64,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import OpsCheckbox from "@/shared/ui/components/Checkbox.vue";
+import {IonRippleEffect} from "@ionic/vue";
 
 type ParkingType = 'indoor' | 'outdoor' | null
 type Radius = { min: number, max: number }
