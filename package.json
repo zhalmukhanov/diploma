@@ -31,6 +31,7 @@
     "vue": "^3.3.0",
     "vue-i18n": "^8.28.2",
     "vue-router": "^4.2.0",
+    "vue-time-ranges-picker": "^0.9.98",
     "vue3-otp-input": "^0.4.4",
     "vue3-otp-input-field": "^1.0.4"
   },

@@ -48,7 +48,7 @@
 
   <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
     <div class="block">
-      <main-parking :id="openParkingId"/>
+      <main-parking :id="openParkingId" @close="closeParking"/>
     </div>
   </ion-modal>
 </template>

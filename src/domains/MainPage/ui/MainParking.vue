@@ -81,7 +81,7 @@
       </div>
 
       <div class="flex flex-col grow justify-end h-full w-full mt-8">
-        <ops-button class="h-[46px]">Reserve spot</ops-button>
+        <ops-button @click="goToReservation" class="h-[46px]">Reserve spot</ops-button>
       </div>
     </div>
   </div>
@@ -116,6 +116,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['close'])
+
 const router = useRouter()
 const swiperModules = [Pagination]
 
@@ -123,6 +125,11 @@ const swiperModules = [Pagination]
 const currentParking = computed<Parking>(() => {
   return parkings.find(parking => parking.id === props.id)
 })
+
+const goToReservation = () => {
+  emit('close')
+  router.push('/reservation?parkingId=' + props.id)
+}
 </script>
 
 <style scoped>
