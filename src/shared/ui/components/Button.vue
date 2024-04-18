@@ -7,6 +7,11 @@ const props = defineProps({
     type: String as () => 'primary' | 'secondary',
     required: false,
     default: 'primary'
+  },
+  disible: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -15,11 +20,12 @@ const classes = {
   color: {
     primary: 'bg-blue-700 hover:bg-blue-600 text-white',
     secondary: 'bg-white text-blue-700 hover:bg-gray-200'
-  }
+  },
+  disible: 'opacity-50 cursor-not-allowed'
 }
 
 const buttonClasses = computed(() => {
-  return `${classes.base} ${classes.color[props.color]}`
+  return `${classes.base} ${classes.color[props.color]} ${props.disible ? classes.disible : ''}`
 })
 
 </script>

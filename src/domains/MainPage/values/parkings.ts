@@ -4,7 +4,7 @@ import {Parking} from "@/domains/MainPage/types";
 export const parkings: Parking[] = [
     {
         id: 1,
-        name: 'ADK Parking, Satpayeva 90',
+        name: 'ADK Parking',
         address: 'Satpayeva 90',
         coordinates: {
             latitude: 43.23927166645193,
