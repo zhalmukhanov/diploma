@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils'
-import FolderPage from '../../src/domains/TestPage/ReservationPage.vue'
+import FolderPage from '../../src/domains/TestPage/MyReservationPage.vue'
 import { describe, expect, test } from 'vitest'
 
-describe('ReservationPage.vue', () => {
+describe('MyReservationPage.vue', () => {
   test('renders folder view', () => {
     const mockRoute = {
       params: {

@@ -32,7 +32,7 @@
                     mode="ios"
                     id="starttime"
                     presentation="time"
-                    :value="minTime"
+                    v-model="startTimeModel"
                     minute-values="0,15,30,45"
                     locale="es-ES"
                     :format-options="formatOptions"
@@ -44,13 +44,13 @@
               <div class="text-center flex flex-col gap-4 font-medium text-xl">
                 <span>End time</span>
                 <ion-datetime
-                    :min="minTime"
+                    :min="endMinTime"
                     :max="maxTime"
                     class="rounded-2xl"
                     mode="ios"
                     id="endtime"
                     presentation="time"
-                    :value="minTime"
+                    v-model="endTimeModel"
                     minute-values="0,15,30,45"
                     locale="es-ES"
                     :format-options="formatOptions"
@@ -161,7 +161,7 @@
           <div class="flex justify-start">
             <div class="flex flex-col gap-1 w-[140px]">
               <span class="text-sm">Duration</span>
-              <span class="text-[16px] font-bold">2 hours</span>
+              <span class="text-[16px] font-bold">{{ duration }}</span>
             </div>
           </div>
 
@@ -174,7 +174,7 @@
         </div>
 
         <div class="flex flex-col justify-end h-full w-full mt-5">
-          <ops-button class="h-[46px]" @click="confirmReservation">Confirm reservation</ops-button>
+          <ops-button class="h-[46px]" @click="confirmReservation()">Confirm reservation</ops-button>
         </div>
 
       </div>
@@ -184,7 +184,7 @@
 
 <script setup lang="ts">
 import {useRoute, useRouter} from "vue-router";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import IconBack from "@/shared/ui/icon/back.vue";
 import { floors } from "./values";
 import { IonDatetime, IonDatetimeButton, IonModal, modalController } from '@ionic/vue';
@@ -207,10 +207,66 @@ const currentRowId = ref<number>(1)
 const isOpenConfirm = ref<boolean>(false)
 const currentParking = parkings[0]
 
-const minTime = ref<string>('2022-05-31T09:00:00')
-const maxTime = ref<string>('2022-05-31T21:00:00')
+const minTime = ref<string>('2024-04-24T09:00:00')
+const maxTime = ref<string>('2024-04-24T21:00:00')
+
+
+const endMinTime = computed(() => {
+  const date = new Date(startTimeModel.value)
+
+  if (date.getMinutes() < 45) date.setMinutes(date.getMinutes() + 15)
+  else {
+    date.setHours(date.getHours() + 1)
+    date.setMinutes(0)
+  }
+  date.setHours(date.getHours() + 5)
+  return date.toISOString()
+})
+
+
+const startTimeModel = ref<string>(minTime.value)
+const endTimeModel = ref<string>(endMinTime.value)
+
+
+watch(endMinTime, (newVal) => {
+  endTimeModel.value = newVal
+})
+
+watch(endTimeModel, (newVal) => {
+  duration.value = calculateDuration(startTimeModel.value, newVal)
+})
+
+
+const calculateDuration = (startDate: any, endDate: any) => {
+  const startTime = new Date(startDate);
+  const endTime = new Date(endDate);
+  const dur = endTime.getTime() - startTime.getTime();
+
+  let durationInHours = Math.floor(dur / 3600000);
+  let durationInMinutes = Math.floor((dur % 3600000) / 60000);
+
+  durationInHours = durationInHours < 0 ? durationInHours * -1 : durationInHours
+  durationInMinutes = durationInMinutes < 0 ? durationInMinutes * -1 : durationInMinutes
+
+
+  let durationStr = '';
+  if (durationInHours > 0) {
+    durationStr += `${durationInHours} hour${durationInHours > 1 ? 's' : ''}`;
+  }
+  if (durationInMinutes > 0) {
+    if (durationStr.length > 0) {
+      durationStr += ' ';
+    }
+    durationStr += `${durationInMinutes} minute${durationInMinutes > 1 ? 's' : ''}`;
+  }
+
+  return durationStr
+}
+
+const duration = ref(calculateDuration(startTimeModel.value, endTimeModel.value))
 
 const close = () => modalController.dismiss(null, 'confirm');
+
 
 const currentFloor = computed(() => floors[floorId.value])
 const maxRows = computed(() => currentFloor.value.rows.length)
@@ -266,8 +322,7 @@ const openConfirm = async () => {
 const confirmReservation = async () => {
   await closeConfirm();
 
-  const reservationId = 12568
-  router.push(`/my-reservation/${reservationId}`)
+  router.push(`/my-reservation`)
 }
 
 

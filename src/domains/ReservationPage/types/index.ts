@@ -1,20 +1,17 @@
-export type Foor = {
-    id: number
-    title: string
-    row_count: number
-    rows: {
-        id: number
-        title: string
-        seats: {
-            id: number
-            title: string
-            isReserved: boolean
-        }[][]
-    }[]
+export type MyReservation = {
+    id: string
+    parkingName: string
+    startDate: string
+    endDate: string
+    slot: string
+    floor: string
+    price: string
 }
 
-export type Reservation = {
-    floor_id: number
-    row_id: number
-    seat_id: number
+export type HistoryReservation = {
+    id: string
+    parkingName: string
+    startDate: string
+    endDate: string
+    price: string
 }

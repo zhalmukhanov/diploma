@@ -45,21 +45,21 @@ export const floors: Foor[] = [
                         title: 'Seat 1',
                         isReserved: false
                     },
-                    {
-                        id: 5,
-                        title: 'Seat 2',
-                        isReserved: false
-                    }],
+                        {
+                            id: 5,
+                            title: 'Seat 2',
+                            isReserved: false
+                        }],
                     [{
                         id: 6,
                         title: 'Seat 3',
                         isReserved: false
                     },
-                    {
-                        id: 7,
-                        title: 'Seat 4',
-                        isReserved: false
-                    }]
+                        {
+                            id: 7,
+                            title: 'Seat 4',
+                            isReserved: false
+                        }]
                 ]
             }
         ]
@@ -78,31 +78,31 @@ export const floors: Foor[] = [
                         title: 'Seat 1',
                         isReserved: false
                     },
-                    {
-                        id: 9,
-                        title: 'Seat 2',
-                        isReserved: false
-                    }],
+                        {
+                            id: 9,
+                            title: 'Seat 2',
+                            isReserved: false
+                        }],
                     [{
                         id: 10,
                         title: 'Seat 3',
                         isReserved: false
                     },
-                    {
-                        id: 11,
-                        title: 'Seat 4',
-                        isReserved: false
-                    }],
+                        {
+                            id: 11,
+                            title: 'Seat 4',
+                            isReserved: false
+                        }],
                     [{
                         id: 12,
                         title: 'Seat 5',
                         isReserved: false
                     },
-                    {
-                        id: 13,
-                        title: 'Seat 6',
-                        isReserved: false
-                    }]
+                        {
+                            id: 13,
+                            title: 'Seat 6',
+                            isReserved: false
+                        }]
                 ]
             },
             {
@@ -114,21 +114,21 @@ export const floors: Foor[] = [
                         title: 'Seat 1',
                         isReserved: false
                     },
-                    {
-                        id: 15,
-                        title: 'Seat 2',
-                        isReserved: false
-                    }],
+                        {
+                            id: 15,
+                            title: 'Seat 2',
+                            isReserved: false
+                        }],
                     [{
                         id: 16,
                         title: 'Seat 3',
                         isReserved: false
                     },
-                    {
-                        id: 17,
-                        title: 'Seat 4',
-                        isReserved: false
-                    }]
+                        {
+                            id: 17,
+                            title: 'Seat 4',
+                            isReserved: false
+                        }]
                 ]
             }
         ]
