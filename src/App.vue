@@ -1,15 +1,31 @@
 <template>
   <ion-app>
-    <ion-menu type="overlay" content-id="main-content">
-      <div>
-        <div v-for="pages in appPages" :key="pages.url" >
-          <router-link :to="pages.url">
-            <span>{{pages.title}}</span>
-          </router-link>
+    <ion-menu type="overlay" content-id="main-content" :disabled="isDisabledMenuPage">
+      <div class="custom-menu">
+        <div class="flex gap-3 items-center">
+          <div class="text-[16px] text-white font-bold flex items-center justify-center rounded-full h-11 w-11 bg-blue-700">
+            {{ getFirstLatters(userName) }}
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[16px] font-medium gap-0.5">
+              {{userName}}
+            </span>
+            <span class="text-[14px]">
+              {{phone}}
+            </span>
+          </div>
+        </div>
+        <div class="menu-link-container">
+          <div v-for="pages in appPages" :key="pages.url" >
+            <ion-menu-toggle>
+              <span @click="goToPage(pages.url)" class="menu-link">{{pages.title}}</span>
+            </ion-menu-toggle>
+          </div>
         </div>
       </div>
+
     </ion-menu>
-    <div class="h-full w-full">
+    <div class="h-full w-full" id="main-content">
       <router-view/>
     </div>
   </ion-app>
@@ -18,9 +34,10 @@
 <script setup lang="ts">
 import {
   IonApp,
-  IonMenu
+  IonMenu,
+    IonMenuToggle
 } from '@ionic/vue';
-import { ref } from 'vue';
+import {computed} from 'vue';
 import {
   heartOutline,
   heartSharp,
@@ -33,48 +50,82 @@ import {
   warningOutline,
   warningSharp,
 } from 'ionicons/icons';
+import {useRoute, useRouter} from "vue-router";
 
-const selectedIndex = ref(0);
+
+const route = useRoute();
+const router = useRouter();
+const currentPage = computed(() => route.path.split('/')[1]);
+
+const isDisabledMenuPage = computed(() => {
+  return ['hello', 'login', 'register', 'reset-password'].includes(currentPage.value);
+});
+
+const userName = 'Adilbek Zhalmukhanov';
+const phone = '+77058253345';
+
+const getFirstLatters = (name: string) => {
+  return name.split(' ').map((item) => item[0]).join('').toUpperCase();
+};
+
+const goToPage = (url: string) => {
+  router.push(url);
+};
+
 const appPages = [
   {
-    title: 'Main',
-    url: '/folder/main',
+    title: 'My reservations',
+    url: '/my-reservation',
     iosIcon: mailOutline,
     mdIcon: mailSharp,
   },
   {
-    title: 'Settings',
-    url: '/folder/settings',
+    title: 'Bonuses and promo codes',
+    url: '/bonuses',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp,
   },
   {
-    title: 'My reservations',
-    url: '/folder/my_reservations',
+    title: 'Settings',
+    url: '/settings',
     iosIcon: heartOutline,
     mdIcon: heartSharp,
   },
   {
-    title: 'Bonuses and promo codes ',
-    url: '/folder/bonuses',
+    title: 'Support',
+    url: '/support',
     iosIcon: trashOutline,
     mdIcon: trashSharp,
   },
   {
-    title: 'Support',
-    url: '/folder/support',
+    title: 'Log out',
+    url: '/logout',
     iosIcon: warningOutline,
     mdIcon: warningSharp,
   },
 ];
 
-const path = window.location.pathname.split('folder/')[1];
-if (path !== undefined) {
-  selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
-}
 </script>
 
 <style scoped>
+.custom-menu {
+  margin-top: 100px;
+  padding: 0 25px 0 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+.menu-link {
+  font-size: 16px;
+  font-weight: 500;
+  color: #030712;
+  text-transform: uppercase;
+}
+.menu-link-container {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }

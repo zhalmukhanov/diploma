@@ -1,10 +1,12 @@
 <template>
     <div id="container" class="h-full w-full relative">
       <div class="absolute top-5 z-50 flex gap-4 px-4 w-full">
-        <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
-          <IconMenu />
-          <ion-ripple-effect/>
-        </div>
+        <ion-menu-toggle>
+          <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
+            <IconMenu />
+            <ion-ripple-effect/>
+          </div>
+        </ion-menu-toggle>
 
         <div class="grow" id="search-modal">
           <div class="h-[40px] w-full flex items-center justify-between px-3 text-gray-400 bg-white rounded-md gap-2 ion-activatable ripple-wrapper">
@@ -57,7 +59,7 @@
 import { load } from '@2gis/mapgl';
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { Geolocation } from '@capacitor/geolocation';
-import { IonModal, IonRippleEffect } from '@ionic/vue';
+import { IonModal, IonRippleEffect, IonMenuToggle } from '@ionic/vue';
 
 import MainFilter from '@/domains/MainPage/ui/MainFilter.vue';
 import MainSearch from '@/domains/MainPage/ui/MainSearch.vue';
