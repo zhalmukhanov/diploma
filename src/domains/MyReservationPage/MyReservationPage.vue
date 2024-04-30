@@ -62,7 +62,7 @@ const currentPage = computed(() => {
 })
 
 const back = () => {
-  router.go(-1)
+  router.push('/main')
 }
 </script>
 

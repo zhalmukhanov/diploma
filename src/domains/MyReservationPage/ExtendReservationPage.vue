@@ -223,7 +223,7 @@ const extend = async () => {
 }
 
 const back = () => {
-  router.go(-1)
+  router.push(`/my-reservation`)
 }
 </script>
 

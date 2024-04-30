@@ -328,7 +328,7 @@ const confirmReservation = async () => {
 
 
 const back = () => {
-  router.go(-1)
+  router.go('/main')
 }
 </script>
 

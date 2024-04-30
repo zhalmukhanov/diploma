@@ -3,7 +3,7 @@
     <div class="h-16 rounded-b-2xl bg-blue-700 w-full flex justify-between items-center ion-padding">
       <icon-back class="w-6 h-6 text-white my-2" @click="back"/>
       <span class="text-white text-[18px] font-semibold">
-        {{isEdit ? 'Edit vehicle' : 'My vehicles' }}
+        {{ isEdit ? 'Edit payment methods' :'Payment methods' }}
       </span>
       <div v-if="!isEdit" class="ion-activatable ripple-wrapper p-1" @click="edit">
         <icon-edit class="w-[18px] h-[18px] text-white" />
@@ -30,7 +30,7 @@
         </template>
       </div>
       <div v-if="isEdit" class="flex flex-col justify-end h-full w-full mt-10 pb-5 grow gap-2">
-        <ops-button class="h-[46px]" @click="addNew">Add new vehicle</ops-button>
+        <ops-button class="h-[46px]" @click="addNew">Add new card</ops-button>
       </div>
     </div>
   </div>
@@ -52,13 +52,13 @@ const router = useRouter()
 const vehicles = ref([
   {
     id: 1,
-    name: 'Main vehicle',
-    number: '777 LLL 04',
+    name: 'Main card',
+    number: '**6794',
   },
   {
     id: 2,
-    name: 'Toyota Land Cruiser',
-    number: '777 III 04',
+    name: 'Kaspi Gold',
+    number: '**6830',
   }
 ])
 const isEdit = ref(false)
@@ -71,7 +71,7 @@ const edit = () => {
 }
 
 const addNew = () => {
-  router.push('/add-vehicle')
+  router.push('/add-card')
 }
 
 const back = () => {
@@ -79,7 +79,7 @@ const back = () => {
     isEdit.value = false
     return
   }
-  router.go('/settings')
+  router.push('/settings')
 }
 </script>
 

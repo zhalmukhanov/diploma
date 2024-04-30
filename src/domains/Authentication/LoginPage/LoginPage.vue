@@ -11,7 +11,7 @@ const email = ref('')
 const password = ref('')
 
 const back = () => {
-  router.go(-1)
+  router.push('/hello')
 }
 
 const goReset = () => {

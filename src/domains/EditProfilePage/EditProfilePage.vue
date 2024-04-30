@@ -71,7 +71,7 @@ const save = () => {
 
 
 const back = () => {
-  router.go(-1)
+  router.push('/settings')
 }
 </script>
 

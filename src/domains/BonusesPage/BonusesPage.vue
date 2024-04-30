@@ -98,7 +98,7 @@ watch(promoCode, (newVal) => {
 })
 
 const back = () => {
-  router.go(-1)
+  router.push('/main')
 }
 </script>
 
