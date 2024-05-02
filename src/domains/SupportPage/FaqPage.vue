@@ -36,7 +36,8 @@ const router = useRouter()
 const route = useRoute()
 
 const currentFaq = computed(() => {
-  return faq[route.params.id]
+  const id: number = +route?.params?.id ?? 0
+  return faq[id]
 })
 
 

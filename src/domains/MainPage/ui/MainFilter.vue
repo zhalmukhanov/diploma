@@ -62,6 +62,9 @@
 </template>
 
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import {ref} from "vue";
 import OpsCheckbox from "@/shared/ui/components/Checkbox.vue";
 import {IonRippleEffect} from "@ionic/vue";

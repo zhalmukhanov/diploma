@@ -19,7 +19,7 @@
             <span class="text-sm text-black text-opacity-50">{{item.name}}</span>
             <div class="flex gap-2 items-center">
               <span class="text-[16px]">{{item.number}}</span>
-              <div v-if="isEdit" class="ion-activatable ripple-wrapper"git >
+              <div v-if="isEdit" class="ion-activatable ripple-wrapper">
                 <icon-delete />
                 <ion-ripple-effect/>
               </div>
@@ -79,7 +79,7 @@ const back = () => {
     isEdit.value = false
     return
   }
-  router.go('/settings')
+  router.push('/settings')
 }
 </script>
 

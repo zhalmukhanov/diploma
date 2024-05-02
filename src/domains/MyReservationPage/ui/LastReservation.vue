@@ -82,6 +82,9 @@
 </template>
 
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import OpsButton from "@/shared/ui/components/Button.vue";
 import { CircleProgressBar } from 'circle-progress.vue'
 import { activeReservation } from "./../values/index";

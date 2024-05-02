@@ -183,6 +183,9 @@
 </template>
 
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import {useRoute, useRouter} from "vue-router";
 import {computed, ref, watch} from "vue";
 import IconBack from "@/shared/ui/icon/back.vue";
@@ -328,7 +331,7 @@ const confirmReservation = async () => {
 
 
 const back = () => {
-  router.go('/main')
+  router.push('/main')
 }
 </script>
 

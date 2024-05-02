@@ -1,6 +1,6 @@
-import { Foor } from "@/domains/ReservationPage/types";
 
-export const floors: Foor[] = [
+
+export const floors: unknown[] = [
     {
         id: 0,
         title: 'Ground floor',

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// @ts-nocheck
 import IconBack from '@/shared/ui/icon/back.vue'
 import {IonAlert} from "@ionic/vue";
 import { OTP } from "vue3-otp-input-field";

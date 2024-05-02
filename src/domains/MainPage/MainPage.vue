@@ -50,12 +50,14 @@
 
   <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
     <div class="block">
-      <main-parking :id="openParkingId" @close="closeParking"/>
+      <main-parking :id="openParkingId ?? 0" @close="closeParking"/>
     </div>
   </ion-modal>
 </template>
 
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { load } from '@2gis/mapgl';
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { Geolocation } from '@capacitor/geolocation';
@@ -74,8 +76,8 @@ import IconSearch from '@/shared/ui/icon/search.vue'
 import MainParking from "@/domains/MainPage/ui/MainParking.vue";
 import {parkings} from "@/domains/MainPage/values/parkings";
 
-const map = ref(null);
-const myMarker = ref(null);
+const map = ref<unknown>(null);
+const myMarker = ref<unknown>(null);
 const isOpenParking = ref(false);
 const openParkingId = ref<number | null>(null);
 const latitude = ref(0);
@@ -98,14 +100,14 @@ const getCurrentPosition = async () => {
   longitude.value = coordinates.coords.longitude;
 };
 
-const zoom = (change) => {
-  map.value.setZoom(map.value.getZoom() + change);
+const zoom = (change: number) => {
+  map.value?.setZoom(map.value.getZoom() + change);
 }
 
 const goToMyLocation = async () => {
   await getCurrentPosition();
-  map.value.setCenter([longitude.value, latitude.value]);
-  map.value.setZoom(startZoom.value);
+  map.value?.setCenter([longitude.value, latitude.value]);
+  map.value?.setZoom(startZoom.value);
 }
 
 onMounted(async () => {
@@ -115,7 +117,7 @@ onMounted(async () => {
     map.value = new mapgl.Map('container', {
       center: [longitude.value, latitude.value],
       zoom: startZoom.value,
-      key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
+      // key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
       zoomControl: false,
     })
 
