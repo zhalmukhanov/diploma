@@ -1,17 +1,20 @@
 /* eslint-disable */
-import { RouteRecordRaw, createRouter, createWebHistory  } from 'vue-router'
+import { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from '@ionic/vue-router';
 import {useParser} from './parser'
 
 const parser = await useParser()
 const allRoutes = parser.getRoutes()
 
-const routes: RouteRecordRaw[] = [
+const routes: Array<RouteRecordRaw> = [
     {
-      path: '',
+      path: '/',
       redirect: '/hello'
     },
     ...allRoutes
 ]
+
+
 
 
 const index = createRouter({
