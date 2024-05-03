@@ -1,56 +1,44 @@
 <template>
   <ion-app>
-    <ion-split-pane content-id="main-content">
-      <ion-menu content-id="main-content" type="overlay">
-        <ion-content>
-          <ion-list id="inbox-list">
-            <ion-list-header>Inbox</ion-list-header>
-            <ion-note>hi@ionicframework.com</ion-note>
-
-            <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
-                <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
+    <ion-menu type="overlay" content-id="main-content" :disabled="isDisabledMenuPage">
+      <div class="custom-menu">
+        <div class="flex gap-3 items-center">
+          <div class="text-[16px] text-white font-bold flex items-center justify-center rounded-full h-11 w-11 bg-blue-700">
+            {{ getFirstLatters(userName) }}
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[16px] font-medium gap-0.5">
+              {{userName}}
+            </span>
+            <span class="text-[14px]">
+              {{phone}}
+            </span>
+          </div>
+        </div>
+        <div class="menu-link-container">
+          <div v-for="pages in appPages" :key="pages.url" >
+            <ion-menu-toggle>
+              <span @click="goToPage(pages.url)" class="menu-link">{{pages.title}}</span>
             </ion-menu-toggle>
-          </ion-list>
+          </div>
+        </div>
+      </div>
 
-          <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
-
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon aria-hidden="true" slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-content>
-      </ion-menu>
-      <ion-router-outlet id="main-content"></ion-router-outlet>
-    </ion-split-pane>
+    </ion-menu>
+    <div class="h-full w-full" id="main-content">
+      <router-view/>
+    </div>
   </ion-app>
 </template>
 
 <script setup lang="ts">
 import {
   IonApp,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
   IonMenu,
-  IonMenuToggle,
-  IonNote,
-  IonRouterOutlet,
-  IonSplitPane,
+    IonMenuToggle
 } from '@ionic/vue';
-import { ref } from 'vue';
+import {computed} from 'vue';
 import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
   heartOutline,
   heartSharp,
   mailOutline,
@@ -62,55 +50,82 @@ import {
   warningOutline,
   warningSharp,
 } from 'ionicons/icons';
+import {useRoute, useRouter} from "vue-router";
 
-const selectedIndex = ref(0);
+
+const route = useRoute();
+const router = useRouter();
+const currentPage = computed(() => route.path.split('/')[1]);
+
+const isDisabledMenuPage = computed(() => {
+  return ['hello', 'login', 'register', 'reset-password'].includes(currentPage.value);
+});
+
+const userName = 'Adilbek Zhalmukhanov';
+const phone = '+77058253345';
+
+const getFirstLatters = (name: string) => {
+  return name.split(' ').map((item) => item[0]).join('').toUpperCase();
+};
+
+const goToPage = (url: string) => {
+  router.push(url);
+};
+
 const appPages = [
   {
-    title: 'Inbox',
-    url: '/folder/Inbox',
+    title: 'My reservations',
+    url: '/my-reservation',
     iosIcon: mailOutline,
     mdIcon: mailSharp,
   },
   {
-    title: 'Outbox',
-    url: '/folder/Outbox',
+    title: 'Bonuses and promo codes',
+    url: '/bonuses',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp,
   },
   {
-    title: 'Favorites',
-    url: '/folder/Favorites',
+    title: 'Settings',
+    url: '/settings',
     iosIcon: heartOutline,
     mdIcon: heartSharp,
   },
   {
-    title: 'Archived',
-    url: '/folder/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
-  {
-    title: 'Trash',
-    url: '/folder/Trash',
+    title: 'Support',
+    url: '/support',
     iosIcon: trashOutline,
     mdIcon: trashSharp,
   },
   {
-    title: 'Spam',
-    url: '/folder/Spam',
+    title: 'Log out',
+    url: '/logout',
     iosIcon: warningOutline,
     mdIcon: warningSharp,
   },
 ];
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
-const path = window.location.pathname.split('folder/')[1];
-if (path !== undefined) {
-  selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
-}
 </script>
 
 <style scoped>
+.custom-menu {
+  margin-top: 100px;
+  padding: 0 25px 0 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+.menu-link {
+  font-size: 16px;
+  font-weight: 500;
+  color: #030712;
+  text-transform: uppercase;
+}
+.menu-link-container {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
