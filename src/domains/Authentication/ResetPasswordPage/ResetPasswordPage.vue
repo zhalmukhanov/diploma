@@ -1,10 +1,9 @@
 <script setup lang="ts">
 // @ts-nocheck
 import IconBack from '@/shared/ui/icon/back.vue'
-import {IonAlert} from "@ionic/vue";
+import {IonAlert, IonPage} from "@ionic/vue";
 import { OTP } from "vue3-otp-input-field";
 import OpsButton from '@/shared/ui/components/Button.vue'
-import {IonImg} from "@ionic/vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 
@@ -51,7 +50,8 @@ const alertButtons = [
 </script>
 
 <template>
-  <div class="h-full flex flex-col bg-blue-700">
+  <ion-page>
+    <div class="h-full flex flex-col bg-blue-700">
     <div class="ion-padding grow flex flex-col justify-between">
       <icon-back class="w-6 h-6 text-white my-2" @click="back"/>
       <div class="bg mx-[45px] grow"/>
@@ -90,6 +90,7 @@ const alertButtons = [
       ></ion-alert>
     </div>
   </div>
+  </ion-page>
 </template>
 
 <style scoped>

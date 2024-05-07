@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import IconBack from '@/shared/ui/icon/back.vue'
 import OpsButton from '@/shared/ui/components/Button.vue'
-import {IonImg} from "@ionic/vue";
+import {IonPage} from "@ionic/vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 import OpsInput from "@/shared/ui/components/Input.vue";
@@ -21,7 +21,8 @@ function goToLogin() {
 </script>
 
 <template>
-  <div class="h-full flex flex-col bg-blue-700">
+  <ion-page>
+    <div class="h-full flex flex-col bg-blue-700">
     <div class="ion-padding grow flex flex-col justify-between">
       <icon-back class="w-6 h-6 text-white my-2" @click="back"/>
       <div class="bg mx-[45px] grow"/>
@@ -46,6 +47,7 @@ function goToLogin() {
 
     </div>
   </div>
+  </ion-page>
 </template>
 
 <style scoped>

@@ -1,4 +1,5 @@
 <template>
+  <ion-page>
     <div id="container" class="h-full w-full relative">
       <div class="absolute top-5 z-50 flex gap-4 px-4 w-full">
         <ion-menu-toggle>
@@ -47,21 +48,22 @@
         <main-search />
       </div>
     </ion-modal>
+    <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
+      <div class="block">
+        <main-parking :id="openParkingId ?? 0" @close="closeParking"/>
+      </div>
+    </ion-modal>
+  </ion-page>
 
-  <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
-    <div class="block">
-      <main-parking :id="openParkingId ?? 0" @close="closeParking"/>
-    </div>
-  </ion-modal>
 </template>
 
 <script setup lang="ts">
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { load } from '@2gis/mapgl';
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 import { Geolocation } from '@capacitor/geolocation';
-import { IonModal, IonRippleEffect, IonMenuToggle } from '@ionic/vue';
+import { IonModal, IonRippleEffect, IonMenuToggle, IonPage, onIonViewDidEnter } from '@ionic/vue';
 
 import MainFilter from '@/domains/MainPage/ui/MainFilter.vue';
 import MainSearch from '@/domains/MainPage/ui/MainSearch.vue';
@@ -110,7 +112,7 @@ const goToMyLocation = async () => {
   map.value?.setZoom(startZoom.value);
 }
 
-onMounted(async () => {
+onIonViewDidEnter(async () => {
   await getCurrentPosition();
 
   load().then((mapgl) => {

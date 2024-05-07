@@ -1,13 +1,12 @@
 // @ts-nocheck
-// @ts-nocheck
-// @ts-nocheck
-// @ts-nocheck
-// @ts-nocheck
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createApp } from 'vue'
 import App from './App.vue'
 import index from './router';
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import AppShadow from '@/shared/utils/shadow'
 
 import { IonicVue } from '@ionic/vue';
 // import VueI18n from 'vue-i18n';
@@ -34,10 +33,19 @@ import './theme/variables.css';
 /* Tailwindcss */
 import './assets/index.css'
 
+
 const app = createApp(App)
   .use(IonicVue)
   .use(index)
+  .use(VueAxios, axios);
   // .use(VueI18n);
+
+
+const uri = 'http://7132-api.tech/api'
+app.axios.defaults.baseURL = `${uri}`
+
+AppShadow.init(app)
+
 
 
 index.isReady().then(() => {

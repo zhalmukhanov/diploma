@@ -1,6 +1,7 @@
 <template>
   <ion-app>
-    <ion-menu type="overlay" content-id="main-content" :disabled="isDisabledMenuPage">
+    <ion-split-pane content-id="main-content">
+      <ion-menu type="overlay" content-id="main-content" :disabled="isDisabledMenuPage">
       <div class="custom-menu">
         <div class="flex gap-3 items-center">
           <div class="text-[16px] text-white font-bold flex items-center justify-center rounded-full h-11 w-11 bg-blue-700">
@@ -25,9 +26,8 @@
       </div>
 
     </ion-menu>
-    <div class="h-full w-full" id="main-content">
-      <router-view/>
-    </div>
+      <ion-router-outlet id="main-content"></ion-router-outlet>
+    </ion-split-pane>
   </ion-app>
 </template>
 
@@ -35,7 +35,8 @@
 import {
   IonApp,
   IonMenu,
-    IonMenuToggle
+    IonMenuToggle,
+    IonRouterOutlet
 } from '@ionic/vue';
 import {computed} from 'vue';
 import {
