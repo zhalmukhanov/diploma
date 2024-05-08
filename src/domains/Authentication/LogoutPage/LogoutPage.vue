@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router"
 import { IonPage } from '@ionic/vue'
 import {postAuthLogout} from "@/shared/api/postAuthLogout";
+import {createRequest} from "@/shared/utils/request";
 
 
 const router = useRouter()
@@ -12,23 +13,12 @@ const loading = ref(true)
 
 
 const logout = async () => {
-  try {
-    loading.value = true
-    const { ok, message } = await postAuthLogout()
+  loading.value = true
+  await createRequest('', 500)
+  loading.value = false
 
-
-
-
-    if (ok || message === 'Unauthenticated.') {
-      window.localStorage.clear()
-      router.push('/login')
-    }
-
-  } catch (e) {
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
+  window.localStorage.removeItem('user')
+  router.push('/hello')
 }
 
 onMounted(() => {

@@ -1,64 +1,95 @@
 <template>
-  <div class="min-h-screen flex flex-col gap-6">
-    <div class="h-16 rounded-b-2xl bg-blue-700 w-full flex justify-between items-center ion-padding">
-      <icon-back class="w-6 h-6 text-white my-2" @click="back"/>
-      <span class="text-white text-[18px] font-semibold">
+  <ion-page>
+    <div class="min-h-screen flex flex-col gap-6">
+      <div class="h-16 rounded-b-2xl bg-blue-700 w-full flex justify-between items-center ion-padding">
+        <icon-back class="w-6 h-6 text-white my-2" @click="back"/>
+        <span class="text-white text-[18px] font-semibold">
         New card
       </span>
-      <div class="h-6 w-6"/>
-    </div>
+        <div class="h-6 w-6"/>
+      </div>
 
-    <div  class="w-full ion-padding py-0 pt-0 flex flex-col h-full grow">
-      <div class="flex flex-col gap-2">
-        <ops-input
-            v-model="cardNumber"
-            class="w-full h-[46px]"
-            placeholder="Card number"
-        />
-        <div class="w-full flex gap-2">
+      <div  class="w-full ion-padding py-0 pt-0 flex flex-col h-full grow">
+        <div class="flex flex-col gap-2">
           <ops-input
-              v-model="cardDate"
+              v-model="cardNumber"
               class="w-full h-[46px]"
-              placeholder="Date"
+              placeholder="Card number"
           />
+          <div class="w-full flex gap-2">
+            <ops-input
+                v-model="cardDate"
+                class="w-full h-[46px]"
+                placeholder="Date"
+            />
+            <ops-input
+                type="password"
+                v-model="ccv"
+                class="w-full h-[46px]"
+                placeholder="CVV"
+            />
+          </div>
           <ops-input
-              type="password"
-              v-model="ccv"
-              class="w-full h-[46px]"
-              placeholder="CVV"
+              v-model="cardName"
+              class="w-full h-[46px] mt-5"
+              placeholder="Card name"
           />
+          <span v-if="error" class="text-[#EF4444] text-xs">{{ error }}</span>
+        </div>
+        <div class="flex flex-col justify-end h-full w-full mt-10 pb-5 grow gap-2">
+          <ops-button class="h-[46px]" :disible="!isCanSave" @click="save" :loading="loading">Save new vehicle</ops-button>
         </div>
       </div>
-      <div class="flex flex-col justify-end h-full w-full mt-10 pb-5 grow gap-2">
-        <ops-button class="h-[46px]" :disible="!isCanSave" @click="save">Save new vehicle</ops-button>
-      </div>
     </div>
-  </div>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import IconBack from "@/shared/ui/icon/back.vue";
-import IconEdit from "@/shared/ui/icon/edit.vue";
-import IconDelete from "@/shared/ui/icon/delete.vue";
-import {IonRippleEffect} from '@ionic/vue';
+import {IonPage, onIonViewDidEnter} from '@ionic/vue';
 import {computed, ref} from "vue";
-import Delete from "@/shared/ui/icon/delete.vue";
 import OpsButton from "@/shared/ui/components/Button.vue";
 import OpsInput from "@/shared/ui/components/Input.vue";
+import {useStore} from "@/shared/store";
 
 const router = useRouter()
+const store = useStore()
 
 
 const cardNumber = ref('')
+const cardName = ref('')
 const cardDate = ref('')
 const ccv = ref(null)
 
-const save = () => {
-  if (!isCanSave.value) {
+const error = ref('')
+const loading = ref(false)
+
+const getError = () => {
+  if (cardNumber.value.length === 0) {
+    error.value = 'Card number is required'
     return
   }
-  router.push('/my-cards')
+  if (cardDate.value.length === 0) {
+    error.value = 'Card date is required'
+    return
+  }
+  if (!ccv.value) {
+    error.value = 'CVV is required'
+    return
+  }
+  return ''
+}
+
+const save = () => {
+  if (getError()) return
+
+  loading.value = true
+  setTimeout(() => {
+    store.addCard(cardName.value,cardNumber.value)
+    loading.value = false
+    router.push('/my-cards')
+  }, 600)
 }
 
 const back = () => {
@@ -67,6 +98,15 @@ const back = () => {
 
 const isCanSave = computed(() => {
   return cardNumber.value.length > 0 && cardDate.value.length > 0 && ccv.value
+})
+
+onIonViewDidEnter(() => {
+  cardDate.value = ''
+  cardNumber.value = ''
+  cardName.value = ''
+  ccv.value = null
+  error.value = ''
+  loading.value = false
 })
 </script>
 

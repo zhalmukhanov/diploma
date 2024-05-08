@@ -30,9 +30,6 @@
           <swiper-slide>
             <img src="/img/parking.jpg">
           </swiper-slide>
-          <swiper-slide>
-            <img src="/img/parking.jpg">
-          </swiper-slide>
         </swiper>
       </div>
 

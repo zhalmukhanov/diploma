@@ -61,7 +61,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { load } from '@2gis/mapgl';
-import { onBeforeUnmount, ref } from "vue";
+import {computed, onBeforeUnmount, ref} from "vue";
 import { Geolocation } from '@capacitor/geolocation';
 import { IonModal, IonRippleEffect, IonMenuToggle, IonPage, onIonViewDidEnter } from '@ionic/vue';
 
@@ -76,8 +76,10 @@ import IconFilter from '@/shared/ui/icon/filter.vue'
 import IconSearch from '@/shared/ui/icon/search.vue'
 
 import MainParking from "@/domains/MainPage/ui/MainParking.vue";
-import {parkings} from "@/domains/MainPage/values/parkings";
 import {getBonuses} from "@/shared/api/getBonuses";
+import {useStore} from "@/shared/store";
+
+const store = useStore();
 
 const map = ref<unknown>(null);
 const myMarker = ref<unknown>(null);
@@ -86,6 +88,7 @@ const openParkingId = ref<number | null>(null);
 const latitude = ref(0);
 const longitude = ref(0);
 const startZoom = ref(17);
+const parkings = ref([])
 
 const closeParking = async () => {
   isOpenParking.value = false;
@@ -113,18 +116,16 @@ const goToMyLocation = async () => {
   map.value?.setZoom(startZoom.value);
 }
 
-const getBonus = async () => {
-  const { ok, data } = await getBonuses();
-  if (!ok) {
-    return;
-  }
-  console.log(data)
-  // bonuses.value = data;
+const getParkings = async () => {
+  parkings.value = store.getParkings();
+
+  console.log('getParkings', store.getParkings())
 }
 
-getBonus();
 onIonViewDidEnter(async () => {
   await getCurrentPosition();
+
+  await getParkings();
 
   load().then((mapgl) => {
     map.value = new mapgl.Map('container', {
@@ -140,9 +141,10 @@ onIonViewDidEnter(async () => {
       size: [50, 50]
     });
 
-    parkings.forEach((parking) => {
+    parkings.value.forEach((parking) => {
+      console.log('parking', parking)
       const marker = new mapgl.Marker(map.value, {
-        coordinates: [parking.coordinates.longitude, parking.coordinates.latitude],
+        coordinates: [parking.lng, parking.lat],
         icon: 'https://raw.githubusercontent.com/zhalmukhanov/diploma/dev/public/img/parking-marker.svg',
         size: [31, 43],
         userData: {

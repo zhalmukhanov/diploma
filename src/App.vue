@@ -38,7 +38,7 @@ import {
     IonMenuToggle,
     IonRouterOutlet
 } from '@ionic/vue';
-import {computed} from 'vue';
+import {computed, onMounted} from 'vue';
 import {
   heartOutline,
   heartSharp,
@@ -106,6 +106,14 @@ const appPages = [
   },
 ];
 
+
+onMounted(() => {
+  const hasUser = window.localStorage.getItem('user');
+
+  if (!hasUser) {
+    router.push('/login');
+  }
+});
 </script>
 
 <style scoped>

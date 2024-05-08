@@ -7,14 +7,17 @@ import {useRouter} from "vue-router"
 import { IonPage } from '@ionic/vue'
 import {postAuthLogin} from "@/shared/api/postAuthLogin";
 import {useToken} from "@/shared/composable";
+import {createRequest} from "@/shared/utils/request";
+import {useStore} from "@/shared/store";
 
 
 const router = useRouter()
-const token = useToken()
+const store = useStore()
 
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
+const error = ref('')
 
 const back = () => {
   router.push('/hello')
@@ -24,8 +27,50 @@ const goReset = () => {
   router.push('/reset-password/step-1')
 }
 
+
+const getError = () => {
+  if (!email.value) {
+    error.value = 'Email is required'
+    return true
+  }
+  if (!password.value) {
+    error.value = 'Password is required'
+    return true
+  }
+
+  error.value = ''
+  return ''
+}
+
+const userLogin = async () => {
+  const data = {
+    email: email.value,
+    password: password.value
+  }
+  return await createRequest(data)
+}
+
+
 const login = async () => {
-  router.push('/main')
+  error.value = ''
+  if (getError()) return
+
+  loading.value = true
+  const response = await userLogin()
+  loading.value = false
+
+  if (response.status === 200) {
+    if (store.checkUserPassword(response.data)) {
+      const cUser = store.getUserByEmail(response.data.email)
+      store.setCurrentUser(cUser)
+
+      window.localStorage.setItem('user', JSON.stringify(cUser))
+      router.push('/main')
+    } else {
+      error.value = 'Incorrect email or password'
+    }
+  }
+
 }
 </script>
 
@@ -50,6 +95,7 @@ const login = async () => {
         <div class="flex flex-col gap-2 w-full">
           <ops-input v-model="email" placeholder="Email" class="h-[46px]"/>
           <ops-input type="password" v-model="password" placeholder="Password" class="h-[46px]"/>
+          <span v-if="error" class="text-[#EF4444] text-xs">{{error}}</span>
         </div>
         <span class="text-sm text-[#1E40AF]" @click="goReset">Forgot password?</span>
 
