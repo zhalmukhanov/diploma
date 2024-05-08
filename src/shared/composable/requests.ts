@@ -48,6 +48,7 @@ export const useRequests = () => {
 
   const setToken = () => {
     const token = useToken().getToken()
+    console.log('token', token)
     vue.axios.defaults.headers.common.Authorization = token
   }
 

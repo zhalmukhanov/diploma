@@ -16,16 +16,16 @@
             class="mySwiper"
         >
           <swiper-slide>
-            <img src="/img/parking.jpg">
+            <img src="/img/parking4.jpg">
           </swiper-slide>
           <swiper-slide>
-            <img src="/img/parking.jpg">
+            <img src="/img/parking1.jpg">
           </swiper-slide>
           <swiper-slide>
-            <img src="/img/parking.jpg">
+            <img src="/img/parking2.jpg">
           </swiper-slide>
           <swiper-slide>
-            <img src="/img/parking.jpg">
+            <img src="/img/parking3.jpg">
           </swiper-slide>
           <swiper-slide>
             <img src="/img/parking.jpg">

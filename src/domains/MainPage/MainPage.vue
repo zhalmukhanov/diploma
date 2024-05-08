@@ -77,6 +77,7 @@ import IconSearch from '@/shared/ui/icon/search.vue'
 
 import MainParking from "@/domains/MainPage/ui/MainParking.vue";
 import {parkings} from "@/domains/MainPage/values/parkings";
+import {getBonuses} from "@/shared/api/getBonuses";
 
 const map = ref<unknown>(null);
 const myMarker = ref<unknown>(null);
@@ -112,6 +113,16 @@ const goToMyLocation = async () => {
   map.value?.setZoom(startZoom.value);
 }
 
+const getBonus = async () => {
+  const { ok, data } = await getBonuses();
+  if (!ok) {
+    return;
+  }
+  console.log(data)
+  // bonuses.value = data;
+}
+
+getBonus();
 onIonViewDidEnter(async () => {
   await getCurrentPosition();
 
@@ -119,17 +130,14 @@ onIonViewDidEnter(async () => {
     map.value = new mapgl.Map('container', {
       center: [longitude.value, latitude.value],
       zoom: startZoom.value,
-      // key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
+      key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
       zoomControl: false,
     })
 
     myMarker.value = new mapgl.Marker(map.value,{
       coordinates: [longitude.value, latitude.value],
       icon: 'https://cdn3.iconfinder.com/data/icons/map-14/144/Map-10-512.png',
-      size: [50, 50],
-      label: {
-        text: "This is me",
-      }
+      size: [50, 50]
     });
 
     parkings.forEach((parking) => {

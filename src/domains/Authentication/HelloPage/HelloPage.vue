@@ -3,13 +3,23 @@ import { IonPage } from '@ionic/vue'
 import OpsButton from '@/shared/ui/components/Button.vue'
 import { IonImg} from '@ionic/vue'
 import { useRouter } from 'vue-router'
+import {onMounted} from "vue";
+import {useToken} from "@/shared/composable";
 
 const router = useRouter()
+const token = useToken()
+
+
+onMounted(() => {
+  if (token.hasToken()) {
+    router.push('/main')
+  }
+})
 </script>
 
 <template>
   <ion-page>
-    <div class="h-full flex flex-col ion-padding bg-blue-700">
+    <div v-if="!token.hasToken()" class="h-full flex flex-col ion-padding bg-blue-700">
       <div class="flex flex-col justify-center h-full">
         <ion-img src="/img/hello-bg.png" alt="Hello page bg" class="w-full"/>
         <p class="text-center text-lg font-medium leading-6 mt-7 text-white">

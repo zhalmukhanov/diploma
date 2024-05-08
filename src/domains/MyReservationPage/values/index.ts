@@ -3,9 +3,9 @@ import {MyReservation, HistoryReservation} from "@/domains/ReservationPage/types
 
 export const activeReservation: MyReservation = {
     id: '1',
-    parkingName: 'Parking 1',
-    startDate: '2024-04-30T18:30:00',
-    endDate: '2024-04-30T20:45:00',
+    parkingName: 'Office parking',
+    startDate: '2024-05-08T18:00:00',
+    endDate: '2024-05-08T20:30:00',
     slot: 'A1',
     floor: '1',
     price: '400'

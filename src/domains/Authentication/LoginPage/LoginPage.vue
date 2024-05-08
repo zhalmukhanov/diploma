@@ -25,26 +25,7 @@ const goReset = () => {
 }
 
 const login = async () => {
-  try {
-    loading.value = true
-    const { ok, data, message } = await postAuthLogin({email: email.value, password: password.value})
-
-    ok
-        ? console.log(message)
-        : console.error(message)
-
-
-    console.log(data)
-    if (ok) {
-      token.setTokenDetails({ ...data })
-      router.push('/main')
-    }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
-
+  router.push('/main')
 }
 </script>
 
@@ -56,7 +37,7 @@ const login = async () => {
       <div class="bg mx-[45px] grow"/>
       <div class="mt-2">
         <p class="text-xl text-white font-bold">
-          Log In to ParKing
+          Log In to ParKing.
         </p>
         <p class="text-base text-white">
           Does’t have an account?

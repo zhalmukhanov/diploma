@@ -12,7 +12,7 @@ export const useToken = () => {
     const typeIs = window.localStorage.getItem(TOKEN_TYPE)
 
     if (!token || !expiration) return null
-    if (Date.now() > parseInt(expiration) * 1000) return null
+    // if (Date.now() > parseInt(expiration) * 1000) return null
 
     return typeIs + ' ' + token
   }

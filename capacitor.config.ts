@@ -5,7 +5,10 @@ const config: CapacitorConfig = {
   appName: 'diplomaApp',
   webDir: 'dist',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'http',
+    "allowNavigation": [
+      "http://7132-api.tech/"
+    ]
   }
 };
 

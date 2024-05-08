@@ -16,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import ('../domains/Authentication/LoginPage/LoginPage.vue')
     },
     {
+        path: '/logout',
+        component: () => import ('../domains/Authentication/LogoutPage/LogoutPage.vue')
+    },
+    {
         path: '/register',
         component: () => import ('../domains/Authentication/RegisterPage/RegisterPage.vue')
     },
