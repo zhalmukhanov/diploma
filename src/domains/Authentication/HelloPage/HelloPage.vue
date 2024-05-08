@@ -23,7 +23,7 @@ onMounted(() => {
       <div class="flex flex-col justify-center h-full">
         <ion-img src="/img/hello-bg.png" alt="Hello page bg" class="w-full"/>
         <p class="text-center text-lg font-medium leading-6 mt-7 text-white">
-          ParkEasy - park effortlessly in 2 steps.<br>
+          ParKing - park effortlessly in 2 steps.<br>
           Parking became a breeze!
         </p>
       </div>

@@ -131,7 +131,7 @@ onIonViewDidEnter(async () => {
     map.value = new mapgl.Map('container', {
       center: [longitude.value, latitude.value],
       zoom: startZoom.value,
-      key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
+      // key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
       zoomControl: false,
     })
 

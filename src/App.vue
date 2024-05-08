@@ -117,6 +117,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.ion-page {
+  --background: #f4f5f8;
+}
 .custom-menu {
   margin-top: 100px;
   padding: 0 25px 0 25px;

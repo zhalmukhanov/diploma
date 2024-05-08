@@ -8,7 +8,7 @@
         </span>
         <div class="w-6 h-6 text-white my-2"></div>
       </div>
-      <div class="flex flex-col gap-4 grow">
+      <div v-if="!loading" class="flex flex-col gap-4 grow">
         <div>
           <div class="flex items-center justify-between ion-padding">
             <span class="text-[17px] font-medium">Parking time</span>
@@ -120,7 +120,9 @@
           <ops-button :disible="!selectedSeat" class="h-[46px]" @click="openConfirm">Reserve spot</ops-button>
         </div>
       </div>
-
+      <div v-else class="w-full ion-padding py-0 pt-0 flex flex-col h-full grow items-center justify-center">
+        <icon-loading class="w-10 h-10 text-blue-700 my-2 animate-spin"/>
+      </div>
     </div>
     <ion-modal :is-open="isOpenConfirm" :initial-breakpoint="1" :breakpoints="[0, 1]">
       <div class="block">
@@ -130,21 +132,21 @@
             <div class="flex justify-start">
               <div class="flex flex-col gap-1 w-[140px]">
                 <span class="text-sm">Parking name</span>
-                <span class="text-[16px] font-bold">{{ currentParking.name }}</span>
+                <span class="text-[16px] font-bold">{{ currentParking.info.name }}</span>
               </div>
             </div>
 
             <div class="flex justify-end">
               <div class="flex flex-col gap-1 w-[140px]">
-                <span class="text-sm">Address</span>
-                <span class="text-[16px] font-bold">{{ currentParking.address }}</span>
+                <span class="text-sm">Floor</span>
+                <span class="text-[16px] font-bold">{{ currentFloor.title }}</span>
               </div>
             </div>
 
             <div class="flex justify-start">
               <div class="flex flex-col gap-1 w-[140px]">
                 <span class="text-sm">Address</span>
-                <span class="text-[16px] font-bold">{{ currentParking.address }}</span>
+                <span class="text-[16px] font-bold">{{ currentParking.info.address }}</span>
               </div>
             </div>
 
@@ -169,13 +171,13 @@
             <div class="flex justify-end">
               <div class="flex flex-col gap-1 w-[140px]">
                 <span class="text-sm text-bold">Total price</span>
-                <span class="text-[16px] font-bold">400₸</span>
+                <span class="text-[16px] font-bold">{{calculatePrice()}}₸</span>
               </div>
             </div>
           </div>
 
           <div class="flex flex-col justify-end h-full w-full mt-5">
-            <ops-button class="h-[46px]" @click="confirmReservation()">Confirm reservation</ops-button>
+            <ops-button class="h-[46px]" @click="confirmReservation()" :loading="confirmLoading">Confirm reservation</ops-button>
           </div>
 
         </div>
@@ -191,10 +193,11 @@
 import {useRoute, useRouter} from "vue-router";
 import {computed, ref, watch} from "vue";
 import IconBack from "@/shared/ui/icon/back.vue";
-import { floors } from "./values";
-import { IonDatetime, IonDatetimeButton, IonModal, modalController, IonPage } from '@ionic/vue';
+import {IonDatetime, IonDatetimeButton, IonModal, modalController, IonPage, onIonViewDidEnter} from '@ionic/vue';
 import OpsButton from "@/shared/ui/components/Button.vue";
-import {parkings} from "@/domains/MainPage/values/parkings";
+import {useStore} from "@/shared/store";
+import IconLoading from "@/shared/ui/icon/loading.vue";
+import {createRequest} from "@/shared/utils/request";
 
 const formatOptions = {
   time: {
@@ -205,15 +208,19 @@ const formatOptions = {
 
 const route = useRoute()
 const router = useRouter()
+const store = useStore()
 
 const parkingId = route.query.parkingId as string
 const floorId = ref<number>(0)
 const currentRowId = ref<number>(1)
 const isOpenConfirm = ref<boolean>(false)
-const currentParking = parkings[0]
+const currentParking = computed(() => store.getParkingById(+parkingId))
 
-const minTime = ref<string>('2024-04-24T09:00:00')
-const maxTime = ref<string>('2024-04-24T21:00:00')
+const loading = ref(false)
+const confirmLoading = ref(false)
+
+const minTime = computed(() => currentParking.value.info.startTime)
+const maxTime = computed(() => currentParking.value.info.endTime)
 
 
 const endMinTime = computed(() => {
@@ -273,7 +280,7 @@ const duration = ref(calculateDuration(startTimeModel.value, endTimeModel.value)
 const close = () => modalController.dismiss(null, 'confirm');
 
 
-const currentFloor = computed(() => floors[floorId.value])
+const currentFloor = computed(() => currentParking.value.places[floorId.value])
 const maxRows = computed(() => currentFloor.value.rows.length)
 const currentRow = computed(() => currentFloor.value.rows[currentRowId.value - 1])
 const selectedSeat = ref<number>(0)
@@ -282,13 +289,13 @@ const selectedSeat = ref<number>(0)
 const previosFloor = () => {
   if (floorId.value > 0) {
     floorId.value--
-  } else  floorId.value = floors.length - 1
+  } else  floorId.value = currentParking.value.places.length - 1
 
   currentRowId.value = 1
 }
 
 const nextFloor = () => {
-  if (floorId.value < floors.length - 1) {
+  if (floorId.value < currentParking.value.places.length - 1) {
     floorId.value++
   } else  floorId.value = 0
 
@@ -324,9 +331,38 @@ const openConfirm = async () => {
   isOpenConfirm.value = true;
 }
 
-const confirmReservation = async () => {
-  await closeConfirm();
+const confirmRequest = async () => {
+  return createRequest('')
+}
 
+// calculate Price. currentParking.value.info.price per hour
+const calculatePrice = () => {
+  const startTime = new Date(startTimeModel.value);
+  const endTime = new Date(endTimeModel.value);
+  const dur = endTime.getTime() - startTime.getTime();
+
+  let durationInHours = Math.floor(dur / 3600000);
+  let durationInMinutes = Math.floor((dur % 3600000) / 60000);
+
+  durationInHours = durationInHours < 0 ? durationInHours * -1 : durationInHours
+  durationInMinutes = durationInMinutes < 0 ? durationInMinutes * -1 : durationInMinutes
+
+  return (durationInHours + (durationInMinutes / 60)) * currentParking.value.info.price
+}
+
+const confirmReservation = async () => {
+  confirmLoading.value = true
+  await confirmRequest()
+  confirmLoading.value = false
+
+  store.setReservation({
+    spotId: selectedSeat.value,
+    startTime: startTimeModel.value,
+    endTime: endTimeModel.value,
+    price: calculatePrice(),
+  })
+
+  await closeConfirm();
   router.push(`/my-reservation`)
 }
 
@@ -335,6 +371,13 @@ const confirmReservation = async () => {
 const back = () => {
   router.push('/main')
 }
+
+onIonViewDidEnter(() => {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 1000)
+})
 </script>
 
 <style scoped>

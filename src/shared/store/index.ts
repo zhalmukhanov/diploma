@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {usersData, vehiclesData, cardData, parkingsData} from "@/shared/store/values";
+import {usersData, vehiclesData, cardData, parkingsData, reservationsData} from "@/shared/store/values";
 
 export type User = {
     id: number
@@ -30,13 +30,23 @@ export type Parking = {
         startTime: string
         endTime: string
         possibilities: string[]
-    }
+    },
+    places: unknown[]
 }
 
 export type ParkingForMap = {
     id: number
     lat: number
     lng: number
+}
+
+export type Reservation = {
+    id: number
+    userId: number
+    stopId: number
+    startTime: string
+    endTime: string
+    price: number
 }
 
 export type Store = {
@@ -51,6 +61,10 @@ export type Store = {
     cardId: number
 
     parking: Parking[]
+
+    reservations: Reservation[]
+    reservationsId: number
+    activeReservation: Reservation | null
 }
 
 
@@ -67,14 +81,18 @@ export const useStore = defineStore('main', {
     },
     userId: usersData.length + 1,
 
-      vehicles: vehiclesData,
-      vehicleId: vehiclesData.length + 1,
+    vehicles: vehiclesData,
+    vehicleId: vehiclesData.length + 1,
 
-      cards: cardData,
-        cardId: cardData.length + 1,
+    cards: cardData,
+    cardId: cardData.length + 1,
 
-      // parking
-      parkings: parkingsData
+    // parking
+    parkings: parkingsData,
+
+    // reservations
+    reservations: reservationsData,
+    reservationsId: reservationsData.length + 1
 
   }),
   getters: {
@@ -171,6 +189,51 @@ export const useStore = defineStore('main', {
                 lat: p.lat,
                 lng: p.lng
             }))
+      },
+      getParkingById(id: number): Parking {
+            return this.parkings.find((p) => p.id === id) || {
+                id: 0,
+                lat: 0,
+                lng: 0,
+                isFavorite: false,
+                info: {
+                    name: '',
+                    address: '',
+                    price: 0,
+                    free: 0,
+                    images: [],
+                    startTime: '',
+                    endTime: '',
+                    possibilities: []
+                }
+            }
+      },
+      setFavoriteParking(id: number) {
+            this.parkings = this.parkings.map((p) => {
+                if (p.id === id) {
+                    return {
+                        ...p,
+                        isFavorite: !p.isFavorite
+                    }
+                }
+                return p
+            })
+      },
+
+      // reservations
+      setReservation({stopId, startTime, endTime, price}) {
+        const id = this.reservationsId++
+
+          this.reservations.push({
+                id,
+                userId: this.currentUser.id,
+                stopId,
+                startTime,
+                endTime,
+                price
+            })
+
+        this.activeReservation = this.reservations.find((r) => r.id === id) || null
       }
   },
 })
