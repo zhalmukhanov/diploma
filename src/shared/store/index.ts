@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {usersData, vehiclesData, cardData, parkingsData, reservationsData} from "@/shared/store/values";
+import {usersData, vehiclesData, cardData, parkingsData, reservationsData, historyData} from "@/shared/store/values";
 
 export type User = {
     id: number
@@ -43,9 +43,19 @@ export type ParkingForMap = {
 export type Reservation = {
     id: number
     userId: number
-    stopId: number
+    spotName: string
+    placeName: string
+    parkingName: string
     startTime: string
     endTime: string
+    price: number
+}
+
+export type History = {
+    id: number
+    parkingName: string
+    startDate: string
+    endDate: string
     price: number
 }
 
@@ -60,11 +70,11 @@ export type Store = {
     cards: Vehicle[]
     cardId: number
 
-    parking: Parking[]
+    parkings: Parking[]
 
     reservations: Reservation[]
     reservationsId: number
-    activeReservation: Reservation | null
+    history: History[]
 }
 
 
@@ -92,8 +102,8 @@ export const useStore = defineStore('main', {
 
     // reservations
     reservations: reservationsData,
-    reservationsId: reservationsData.length + 1
-
+    reservationsId: reservationsData.length + 1,
+    history: historyData
   }),
   getters: {
       getUsers(): User[] {
@@ -109,6 +119,14 @@ export const useStore = defineStore('main', {
 
       getCards(): Vehicle[] {
           return this.cards.filter((v) => v.userId === this.currentUser.id)
+      },
+
+      getUserLastReservation(): Reservation | null {
+          return this.reservations.find((r) => r.userId === this.currentUser.id) || null
+      },
+
+      getHistory(): History[] {
+            return this.history
       }
   },
   actions: {
@@ -221,19 +239,88 @@ export const useStore = defineStore('main', {
       },
 
       // reservations
-      setReservation({stopId, startTime, endTime, price}) {
+      setReservation({spotName, placeName, parkingName, startTime, endTime, price}) {
+        debugger
         const id = this.reservationsId++
-
           this.reservations.push({
                 id,
                 userId: this.currentUser.id,
-                stopId,
+                spotName,
+                placeName,
+                parkingName,
                 startTime,
                 endTime,
                 price
             })
+      },
 
-        this.activeReservation = this.reservations.find((r) => r.id === id) || null
+      getParkingBySpotId(spotId: number): Parking {
+            return this.parkings.find((p) => p.places.some((pl) => pl.id === spotId)) || {
+                id: 0,
+                lat: 0,
+                lng: 0,
+                isFavorite: false,
+                info: {
+                    name: '',
+                    address: '',
+                    price: 0,
+                    free: 0,
+                    images: [],
+                    startTime: '',
+                    endTime: '',
+                    possibilities: []
+                },
+                places: []
+            }
+      },
+
+      getSpotName(spotId: number): string {
+            const parking = this.getParkingBySpotId(spotId)
+            const places = parking.places.find((p) => p.places.some((pl) => pl.id === spotId))
+
+            return places?.places.find((pl) => pl.id === spotId)?.title || ''
+      },
+
+      getPlaceName(spotId: number): string {
+            const parking = this.getParkingBySpotId(spotId)
+            const places = parking.places.find((p) => p.places.some((pl) => pl.id === spotId))
+
+            return places[0].title || ''
+      },
+
+      getResevationById(id: number): Reservation {
+            return this.reservations.find((r) => r.id === id) || {
+                id: 0,
+                userId: 0,
+                spotName: '',
+                placeName: '',
+                parkingName: '',
+                startTime: '',
+                endTime: '',
+                price: 0
+            }
+      },
+
+      updateReservation(startTime: string, endTime: string, price: number, id: number) {
+            this.reservations = this.reservations.map((r) => {
+                if (r.id === id) {
+                    return {
+                        ...r,
+                        startTime,
+                        endTime,
+                        price
+                    }
+                }
+                return r
+            })
+      },
+
+      getParkingPriceByName(name: string): number {
+            return this.parkings.find((p) => p.info.name === name)?.info.price || 0
+      },
+
+      cancelReservation(id: number) {
+            this.reservations = this.reservations.filter((r) => r.id !== id)
       }
   },
 })

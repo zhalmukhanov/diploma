@@ -32,9 +32,7 @@
 
     </div>
 
-    <KeepAlive>
-      <component :is="currentPage"/>
-    </KeepAlive>
+    <component :is="currentPage"/>
   </div>
   </ion-page>
 </template>
@@ -42,7 +40,7 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import IconBack from "@/shared/ui/icon/back.vue";
-import {IonModal, IonPage, IonRippleEffect} from '@ionic/vue';
+import {IonPage, IonRippleEffect} from '@ionic/vue';
 import LastReservation from "@/domains/MyReservationPage/ui/LastReservation.vue";
 import HistoryReservation from "@/domains/MyReservationPage/ui/HistoryReservation.vue";
 import {computed, ref} from "vue";

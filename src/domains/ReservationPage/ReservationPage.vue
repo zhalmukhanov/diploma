@@ -356,7 +356,9 @@ const confirmReservation = async () => {
   confirmLoading.value = false
 
   store.setReservation({
-    spotId: selectedSeat.value,
+    parkingName: currentParking.value.info.name,
+    placeName: currentFloor.value.title,
+    spotName: currentRow.value.seats.find((s) => s.find((i) => i.id === selectedSeat.value)).map((m) => m.id === selectedSeat.value ? m.title : '' ).join(''),
     startTime: startTimeModel.value,
     endTime: endTimeModel.value,
     price: calculatePrice(),

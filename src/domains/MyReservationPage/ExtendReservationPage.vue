@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen flex flex-col gap-6">
+  <ion-page>
+    <div class="min-h-screen flex flex-col gap-6">
     <div class="h-16 rounded-b-2xl bg-blue-700 w-full flex justify-between items-center ion-padding">
       <icon-back class="w-6 h-6 text-white my-2" @click="back"/>
       <span class="text-white text-[18px] font-semibold">
@@ -16,14 +17,14 @@
         <div class="flex justify-start">
           <div class="flex flex-col gap-1 w-[140px]">
             <span class="text-sm">Parking slot</span>
-            <span class="text-[16px] font-bold">{{ myReservation.slot }}</span>
+            <span class="text-[16px] font-bold">{{ myReservation.spotName }}</span>
           </div>
         </div>
 
         <div class="flex justify-end">
           <div class="flex flex-col gap-1 w-[140px]">
             <span class="text-sm">Floor</span>
-            <span class="text-[16px] font-bold">{{ myReservation.floor }}</span>
+            <span class="text-[16px] font-bold">{{ myReservation.placeName }}</span>
           </div>
         </div>
 
@@ -111,28 +112,33 @@
 
             <div class="flex flex-col justify-end h-full w-full mt-4 pb-5 grow gap-2">
               <ops-button class="h-[46px]" @click="closeConfirm()" color="outline">No, go back</ops-button>
-              <ops-button class="h-[46px]" @click="extend()">Yes, extend</ops-button>
+              <ops-button class="h-[46px]" @click="extend()" :loading="loading">Yes, extend</ops-button>
             </div>
           </div>
         </div>
       </ion-modal>
     </div>
   </div>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import IconBack from "@/shared/ui/icon/back.vue";
-import {IonDatetime, IonDatetimeButton, IonModal, modalController} from '@ionic/vue';
+import {IonDatetime, IonDatetimeButton, IonModal, modalController, IonPage} from '@ionic/vue';
 import {computed, ref, watch} from "vue";
-import {activeReservation} from "@/domains/MyReservationPage/values";
 import OpsButton from "@/shared/ui/components/Button.vue";
-import MainParking from "@/domains/MainPage/ui/MainParking.vue";
+import {useStore} from "@/shared/store";
+import {createRequest} from "@/shared/utils/request";
 
+const route = useRoute()
 const router = useRouter()
+const store = useStore()
 
-const myReservation = ref(activeReservation)
+const id = route.params.id
+const myReservation = computed(() => store.getResevationById(+id))
 const isOpenConfirm = ref(false)
+const parkingPrice = computed(() => store.getParkingPriceByName(myReservation.value.parkingName))
 
 const closeConfirm = async () => {
   isOpenConfirm.value = false;
@@ -150,7 +156,7 @@ const formatOptions = {
   },
 };
 
-const minTime = ref<string>(myReservation.value.startDate)
+const minTime = ref<string>(myReservation.value.startTime)
 const maxTime = ref<string>('2024-04-25T21:00:00')
 
 
@@ -168,7 +174,9 @@ const endMinTime = computed(() => {
 
 
 const startTimeModel = ref<string>(minTime.value)
-const endTimeModel = ref<string>(endMinTime.value)
+const endTimeModel = ref<string>(myReservation.value.endTime)
+
+const loading = ref(false)
 
 
 watch(endMinTime, (newVal) => {
@@ -211,13 +219,31 @@ const duration = ref(calculateDuration(startTimeModel.value, endTimeModel.value)
 const close = () => modalController.dismiss(null, 'confirm');
 
 const parkingTime = computed(() => {
-  const start = new Date(myReservation.value.startDate)
-  const end = new Date(myReservation.value.endDate)
-  return `${start.getHours()}:${start.getMinutes()} to ${end.getHours()}:${end.getMinutes()}`
+  const start = new Date(myReservation.value.startTime)
+  const end = new Date(myReservation.value.endTime)
+  return `${start.toLocaleTimeString('ru').slice(0, 5)} to ${end.toLocaleTimeString('ru').slice(0, 5)}`
 })
 
+const calculatePrice = () => {
+  const startTime = new Date(startTimeModel.value);
+  const endTime = new Date(endTimeModel.value);
+  const dur = endTime.getTime() - startTime.getTime();
+
+  let durationInHours = Math.floor(dur / 3600000);
+  let durationInMinutes = Math.floor((dur % 3600000) / 60000);
+
+  durationInHours = durationInHours < 0 ? durationInHours * -1 : durationInHours
+  durationInMinutes = durationInMinutes < 0 ? durationInMinutes * -1 : durationInMinutes
+
+  return (durationInHours + (durationInMinutes / 60)) * parkingPrice.value
+}
+
 const extend = async () => {
-  // extend logic
+  loading.value = true
+  await createRequest('')
+  loading.value = false
+
+  store.updateReservation(startTimeModel.value, endTimeModel.value, calculatePrice(), +id)
   await closeConfirm()
   router.push(`/my-reservation`)
 }

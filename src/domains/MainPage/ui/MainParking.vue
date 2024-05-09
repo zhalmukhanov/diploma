@@ -74,7 +74,7 @@
       </div>
     </div>
   </div>
-  <div v-else class="w-full h-[569px] ion-padding py-0 pt-0 flex flex-col h-full grow items-center justify-center">
+  <div v-else class="w-full h-[569px] ion-padding py-0 pt-0 flex flex-col grow items-center justify-center">
     <icon-loading class="w-10 h-10 text-blue-700 my-2 animate-spin"/>
   </div>
 </template>

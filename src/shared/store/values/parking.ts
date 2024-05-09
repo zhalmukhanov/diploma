@@ -13,8 +13,8 @@ export const parkingsData: Parking[] = [
             price: 200,
             free: 10,
             images: ['/img/parking4.jpg', '/img/parking1.jpg', '/img/parking2.jpg', '/img/parking3.jpg'],
-            startTime: '2024-04-24T09:00:00',
-            endTime: '2024-04-24T22:00:00',
+            startTime: '2024-05-09T09:00:00',
+            endTime: '2024-05-09T22:00:00',
             possibilities: ['invalid', 'electrocar'],
         },
         places: [
