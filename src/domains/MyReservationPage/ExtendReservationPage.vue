@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <div class="min-h-screen flex flex-col gap-6">
+    <div class="bg-white min-h-screen flex flex-col gap-6">
     <div class="h-16 rounded-b-2xl bg-blue-700 w-full flex justify-between items-center ion-padding">
       <icon-back class="w-6 h-6 text-white my-2" @click="back"/>
       <span class="text-white text-[18px] font-semibold">
@@ -157,7 +157,7 @@ const formatOptions = {
 };
 
 const minTime = ref<string>(myReservation.value.startTime)
-const maxTime = ref<string>('2024-04-25T21:00:00')
+const maxTime = ref<string>('2024-05-10T22:00:00')
 
 
 const endMinTime = computed(() => {

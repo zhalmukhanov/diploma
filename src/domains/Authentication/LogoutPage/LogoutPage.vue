@@ -28,7 +28,7 @@ onMounted(() => {
 
 <template>
   <ion-page>
-    <div class="h-full flex flex-col items-center justify-center">
+    <div class="bg-white h-full flex flex-col items-center justify-center">
      <icon-loading v-if="loading" class="w-10 h-10 text-blue-700 my-2 animate-spin"/>
     </div>
   </ion-page>

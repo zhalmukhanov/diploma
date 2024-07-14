@@ -6,8 +6,8 @@ export const usersData: User[] = [
         id: 1,
         name: 'Adilbek',
         surname: 'Zhalmukhanov',
-        email: 'user@user.kz',
-        password: '12345678'
+        email: 'adok@gmail.com',
+        password: 'qwerty123'
     }
 ]
 
