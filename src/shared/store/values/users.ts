@@ -4,9 +4,9 @@ import {User, Vehicle} from "@/shared/store";
 export const usersData: User[] = [
     {
         id: 1,
-        name: 'Adilbek',
-        surname: 'Zhalmukhanov',
-        email: 'adok@gmail.com',
+        name: 'Arman',
+        surname: 'Silan',
+        email: 'arman@gmail.com',
         password: 'qwerty123'
     }
 ]
