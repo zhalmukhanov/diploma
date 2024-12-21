@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { IonRippleEffect } from '@ionic/vue'
 import {computed} from "vue";
+import IconLoading from '@/shared/ui/icon/loading.vue'
 
 const props = defineProps({
   color: {
@@ -9,6 +10,11 @@ const props = defineProps({
     default: 'primary'
   },
   disible: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  loading: {
     type: Boolean,
     required: false,
     default: false
@@ -26,14 +32,19 @@ const classes = {
 }
 
 const buttonClasses = computed(() => {
-  return `${classes.base} ${classes.color[props.color]} ${props.disible ? classes.disible : ''}`
+  return `${classes.base} ${classes.color[props.color]} ${props.disible || props.loading ? classes.disible : ''}`
 })
 
 </script>
 
 <template>
   <div :class="buttonClasses">
-    <slot>Button</slot>
+    <slot v-if="!loading">Button</slot>
+    <div v-else>
+      <span class="text-white">
+        <icon-loading class="!w-5 !h-5 animate-spin" />
+      </span>
+    </div>
 
     <ion-ripple-effect>
     </ion-ripple-effect>

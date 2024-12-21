@@ -1,5 +1,6 @@
 <template>
-    <div id="container" class="h-full w-full relative">
+  <ion-page>
+    <div id="container" class="bg-white h-full w-full relative">
       <div class="absolute top-5 z-50 flex gap-4 px-4 w-full">
         <ion-menu-toggle>
           <div @click="goToMyLocation()" class="h-[40px] w-[40px] bg-[#FAFAFA] rounded-md flex items-center justify-center ion-activatable ripple-wrapper">
@@ -47,21 +48,22 @@
         <main-search />
       </div>
     </ion-modal>
+    <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
+      <div class="block">
+        <main-parking :id="openParkingId ?? 0" @close="closeParking"/>
+      </div>
+    </ion-modal>
+  </ion-page>
 
-  <ion-modal :is-open="isOpenParking" :initial-breakpoint="1" :breakpoints="[0, 1]">
-    <div class="block">
-      <main-parking :id="openParkingId ?? 0" @close="closeParking"/>
-    </div>
-  </ion-modal>
 </template>
 
 <script setup lang="ts">
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { load } from '@2gis/mapgl';
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import {computed, onBeforeUnmount, ref} from "vue";
 import { Geolocation } from '@capacitor/geolocation';
-import { IonModal, IonRippleEffect, IonMenuToggle } from '@ionic/vue';
+import { IonModal, IonRippleEffect, IonMenuToggle, IonPage, onIonViewDidEnter } from '@ionic/vue';
 
 import MainFilter from '@/domains/MainPage/ui/MainFilter.vue';
 import MainSearch from '@/domains/MainPage/ui/MainSearch.vue';
@@ -74,7 +76,10 @@ import IconFilter from '@/shared/ui/icon/filter.vue'
 import IconSearch from '@/shared/ui/icon/search.vue'
 
 import MainParking from "@/domains/MainPage/ui/MainParking.vue";
-import {parkings} from "@/domains/MainPage/values/parkings";
+import {getBonuses} from "@/shared/api/getBonuses";
+import {useStore} from "@/shared/store";
+
+const store = useStore();
 
 const map = ref<unknown>(null);
 const myMarker = ref<unknown>(null);
@@ -83,6 +88,7 @@ const openParkingId = ref<number | null>(null);
 const latitude = ref(0);
 const longitude = ref(0);
 const startZoom = ref(17);
+const parkings = ref([])
 
 const closeParking = async () => {
   isOpenParking.value = false;
@@ -110,29 +116,35 @@ const goToMyLocation = async () => {
   map.value?.setZoom(startZoom.value);
 }
 
-onMounted(async () => {
+const getParkings = async () => {
+  parkings.value = store.getParkings();
+
+  console.log('getParkings', store.getParkings())
+}
+
+onIonViewDidEnter(async () => {
   await getCurrentPosition();
+
+  await getParkings();
 
   load().then((mapgl) => {
     map.value = new mapgl.Map('container', {
       center: [longitude.value, latitude.value],
       zoom: startZoom.value,
-      // key: 'd55a5b6d-7996-46ea-8a8d-5d6f287e15ae',
+      key: '9d1d2243-d2c3-48cc-a70a-83423e36d21b',
       zoomControl: false,
     })
 
     myMarker.value = new mapgl.Marker(map.value,{
       coordinates: [longitude.value, latitude.value],
       icon: 'https://cdn3.iconfinder.com/data/icons/map-14/144/Map-10-512.png',
-      size: [50, 50],
-      label: {
-        text: "This is me",
-      }
+      size: [50, 50]
     });
 
-    parkings.forEach((parking) => {
+    parkings.value.forEach((parking) => {
+      console.log('parking', parking)
       const marker = new mapgl.Marker(map.value, {
-        coordinates: [parking.coordinates.longitude, parking.coordinates.latitude],
+        coordinates: [parking.lng, parking.lat],
         icon: 'https://raw.githubusercontent.com/zhalmukhanov/diploma/dev/public/img/parking-marker.svg',
         size: [31, 43],
         userData: {

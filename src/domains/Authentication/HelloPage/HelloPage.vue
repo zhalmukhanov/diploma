@@ -1,17 +1,29 @@
 <script setup lang="ts">
+import { IonPage } from '@ionic/vue'
 import OpsButton from '@/shared/ui/components/Button.vue'
 import { IonImg} from '@ionic/vue'
 import { useRouter } from 'vue-router'
+import {onMounted} from "vue";
+import {useToken} from "@/shared/composable";
 
 const router = useRouter()
+const token = useToken()
+
+
+onMounted(() => {
+  if (token.hasToken()) {
+    router.push('/main')
+  }
+})
 </script>
 
 <template>
-    <div class="h-full flex flex-col ion-padding bg-blue-700">
+  <ion-page>
+    <div v-if="!token.hasToken()" class="h-full flex flex-col ion-padding bg-blue-700">
       <div class="flex flex-col justify-center h-full">
         <ion-img src="/img/hello-bg.png" alt="Hello page bg" class="w-full"/>
         <p class="text-center text-lg font-medium leading-6 mt-7 text-white">
-          ParkEasy - park effortlessly in 2 steps.<br>
+          ParKing - park effortlessly in 2 steps.<br>
           Parking became a breeze!
         </p>
       </div>
@@ -20,6 +32,7 @@ const router = useRouter()
         <ops-button color="secondary"  class="h-11" @click="router.push('/register')">Register</ops-button>
       </div>
     </div>
+  </ion-page>
 </template>
 
 <style scoped>
